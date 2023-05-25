@@ -11,13 +11,13 @@ class UsersController < ApplicationController
   end
 
   def authenticate
-    user = User.find_by(email: params[:user][:email])
+    user = User.find_by(email: params[:email])
 
     if user.nil?
       user_not_found
-    elsif user.authenticate(params[:user][:password])
+    elsif user.authenticate(params[:password])
       reset_failed_attempts(user)
-      token = encode({ user_id: user.id, email: user.email, status: user.blocked })
+      token = encode({ user_id: user.id, email: user.email, status: user.blocked? })
       render json: { token: token }, status: :ok
     else
       increment_failed_attempts(user)
@@ -25,7 +25,7 @@ class UsersController < ApplicationController
         user.update(blocked: true)
         render json: { error: "Account blocked. Please contact the administrator." }, status: :unauthorized
       else
-        record_invalid("Invalid email or password")
+        render json: { errors: "Invalid password" }, status: :unauthorized
       end
     end
   rescue => e
@@ -33,14 +33,17 @@ class UsersController < ApplicationController
   end
 
   def create
-    user = User.new(user_params)
-    user.password = params[:password]
-    user.password_confirmation = params[:password_confirmation]
-    if user.save
+    begin
+      user = User.new(user_params)
+      user.password = params[:password]
+      user.password_confirmation = params[:password_confirmation]
+      user.save!
       token = encode({ user_id: user.id, email: user.email })
       render json: { token: token, user: user }, status: :created
-    else
-      render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
+    rescue ActiveRecord::RecordInvalid => e
+      render json: { errors: e.record.errors.full_messages }, status: :unprocessable_entity
+    rescue ActiveRecord::RecordNotUnique => e
+      render json: { errors: [e.message] }, status: :unprocessable_entity
     end
   end
 
@@ -94,7 +97,7 @@ class UsersController < ApplicationController
   end
 
   def check_blocked_status
-    user = User.find_by(email: params[:user][:email])
+    user = User.find_by(email: params[:email])
 
     if user&.blocked?
       render json: { errors: "Account blocked. Please contact the administrator." }, status: :unauthorized
@@ -102,12 +105,10 @@ class UsersController < ApplicationController
   end
 
   def increment_failed_attempts(user)
-    user.failed_login_attempts += 1
-    user.save
+    user.update(failed_login_attempts: user.failed_login_attempts + 1)
   end
 
   def reset_failed_attempts(user)
-    user.failed_login_attempts = 0
-    user.save
+    user.update(failed_login_attempts: 0)
   end
 end
