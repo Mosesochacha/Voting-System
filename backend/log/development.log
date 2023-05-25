@@ -1,0 +1,1552 @@
+  [1m[35m (804.9ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" varchar NOT NULL PRIMARY KEY)[0m
+  [1m[35m (714.2ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" varchar NOT NULL PRIMARY KEY, "value" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to CreateNationals (20230525174443)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.3ms)[0m  [1m[35mCREATE TABLE "nationals" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.2ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525174443"]]
+  [1m[36mTRANSACTION (389.2ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateCounties (20230525174501)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.5ms)[0m  [1m[35mCREATE TABLE "counties" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "national_id" integer NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_340dca35b4"
+FOREIGN KEY ("national_id")
+  REFERENCES "nationals" ("id")
+)[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE INDEX "index_counties_on_national_id" ON "counties" ("national_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (12.0ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525174501"]]
+  [1m[36mTRANSACTION (374.3ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateSubcounties (20230525174620)
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.8ms)[0m  [1m[35mCREATE TABLE "subcounties" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "county_id" integer NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_16a2d8b6d5"
+FOREIGN KEY ("county_id")
+  REFERENCES "counties" ("id")
+)[0m
+  [1m[35m (0.4ms)[0m  [1m[35mCREATE INDEX "index_subcounties_on_county_id" ON "subcounties" ("county_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.4ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525174620"]]
+  [1m[36mTRANSACTION (573.5ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateWards (20230525174751)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.4ms)[0m  [1m[35mCREATE TABLE "wards" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "subcounty_id" integer NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_fa1ca7dcba"
+FOREIGN KEY ("subcounty_id")
+  REFERENCES "subcounties" ("id")
+)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_wards_on_subcounty_id" ON "wards" ("subcounty_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.8ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525174751"]]
+  [1m[36mTRANSACTION (581.9ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateVoters (20230525175103)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.8ms)[0m  [1m[35mCREATE TABLE "voters" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "id_number" varchar, "name" varchar, "ward_id" integer NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_d1d2681c23"
+FOREIGN KEY ("ward_id")
+  REFERENCES "wards" ("id")
+)[0m
+  [1m[35m (0.4ms)[0m  [1m[35mCREATE INDEX "index_voters_on_ward_id" ON "voters" ("ward_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.6ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525175103"]]
+  [1m[36mTRANSACTION (697.2ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateUsers (20230525175206)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.8ms)[0m  [1m[35mCREATE TABLE "users" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "email" varchar, "password_digest" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.7ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525175206"]]
+  [1m[36mTRANSACTION (416.6ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreatePositions (20230525175241)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.5ms)[0m  [1m[35mCREATE TABLE "positions" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.3ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525175241"]]
+  [1m[36mTRANSACTION (547.4ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateParties (20230525175254)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.8ms)[0m  [1m[35mCREATE TABLE "parties" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.6ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525175254"]]
+  [1m[36mTRANSACTION (755.3ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateCandidates (20230525175304)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.5ms)[0m  [1m[35mCREATE TABLE "candidates" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "party_id" integer NOT NULL, "position_id" integer NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_e0db8e5867"
+FOREIGN KEY ("party_id")
+  REFERENCES "parties" ("id")
+, CONSTRAINT "fk_rails_ee536f9721"
+FOREIGN KEY ("position_id")
+  REFERENCES "positions" ("id")
+)[0m
+  [1m[35m (0.4ms)[0m  [1m[35mCREATE INDEX "index_candidates_on_party_id" ON "candidates" ("party_id")[0m
+  [1m[35m (0.4ms)[0m  [1m[35mCREATE INDEX "index_candidates_on_position_id" ON "candidates" ("position_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.6ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525175304"]]
+  [1m[36mTRANSACTION (561.8ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.4ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.2ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["key", "environment"], ["value", "development"], ["created_at", "2023-05-25 18:05:26.333135"], ["updated_at", "2023-05-25 18:05:26.333135"]]
+  [1m[36mTRANSACTION (382.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Pluck (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Pluck (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Pluck (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[35m (900.2ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" varchar NOT NULL PRIMARY KEY)[0m
+  [1m[35m (789.6ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" varchar NOT NULL PRIMARY KEY, "value" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to CreateNationals (20230525174443)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (1.3ms)[0m  [1m[35mCREATE TABLE "nationals" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.3ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525174443"]]
+  [1m[36mTRANSACTION (715.8ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateCounties (20230525174501)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.3ms)[0m  [1m[35mCREATE TABLE "counties" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "national_id" integer NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_340dca35b4"
+FOREIGN KEY ("national_id")
+  REFERENCES "nationals" ("id")
+)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_counties_on_national_id" ON "counties" ("national_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.2ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525174501"]]
+  [1m[36mTRANSACTION (571.1ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateSubcounties (20230525174620)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.3ms)[0m  [1m[35mCREATE TABLE "subcounties" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "county_id" integer NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_16a2d8b6d5"
+FOREIGN KEY ("county_id")
+  REFERENCES "counties" ("id")
+)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_subcounties_on_county_id" ON "subcounties" ("county_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.2ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525174620"]]
+  [1m[36mTRANSACTION (615.8ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateWards (20230525174751)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.3ms)[0m  [1m[35mCREATE TABLE "wards" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "subcounty_id" integer NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_fa1ca7dcba"
+FOREIGN KEY ("subcounty_id")
+  REFERENCES "subcounties" ("id")
+)[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE INDEX "index_wards_on_subcounty_id" ON "wards" ("subcounty_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.2ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525174751"]]
+  [1m[36mTRANSACTION (723.8ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateVoters (20230525175103)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.4ms)[0m  [1m[35mCREATE TABLE "voters" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "id_number" varchar, "name" varchar, "ward_id" integer NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_d1d2681c23"
+FOREIGN KEY ("ward_id")
+  REFERENCES "wards" ("id")
+)[0m
+  [1m[35m (0.3ms)[0m  [1m[35mCREATE INDEX "index_voters_on_ward_id" ON "voters" ("ward_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.2ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525175103"]]
+  [1m[36mTRANSACTION (531.4ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateUsers (20230525175206)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.7ms)[0m  [1m[35mCREATE TABLE "users" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "email" varchar, "password_digest" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.3ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_users_on_email" ON "users" ("email")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.6ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525175206"]]
+  [1m[36mTRANSACTION (447.6ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreatePositions (20230525175241)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.6ms)[0m  [1m[35mCREATE TABLE "positions" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.4ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525175241"]]
+  [1m[36mTRANSACTION (463.2ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateParties (20230525175254)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.9ms)[0m  [1m[35mCREATE TABLE "parties" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.4ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525175254"]]
+  [1m[36mTRANSACTION (689.0ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateCandidates (20230525175304)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.7ms)[0m  [1m[35mCREATE TABLE "candidates" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "party_id" integer NOT NULL, "position_id" integer NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_e0db8e5867"
+FOREIGN KEY ("party_id")
+  REFERENCES "parties" ("id")
+, CONSTRAINT "fk_rails_ee536f9721"
+FOREIGN KEY ("position_id")
+  REFERENCES "positions" ("id")
+)[0m
+  [1m[35m (0.4ms)[0m  [1m[35mCREATE INDEX "index_candidates_on_party_id" ON "candidates" ("party_id")[0m
+  [1m[35m (0.3ms)[0m  [1m[35mCREATE INDEX "index_candidates_on_position_id" ON "candidates" ("position_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.3ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525175304"]]
+  [1m[36mTRANSACTION (552.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.3ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.3ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["key", "environment"], ["value", "development"], ["created_at", "2023-05-25 19:04:58.265405"], ["updated_at", "2023-05-25 19:04:58.265405"]]
+  [1m[36mTRANSACTION (497.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Started GET "/tregister" for 127.0.0.1 at 2023-05-25 22:11:07 +0300
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  
+ActionController::RoutingError (No route matches [GET] "/tregister"):
+  
+Started GET "/register" for 127.0.0.1 at 2023-05-25 22:11:23 +0300
+  
+ActionController::RoutingError (No route matches [GET] "/register"):
+  
+Started POST "/register" for 127.0.0.1 at 2023-05-25 22:11:34 +0300
+  
+NameError (uninitialized constant UsersController::JWTAuthentication):
+  
+app/controllers/users_controller.rb:2:in `<class:UsersController>'
+app/controllers/users_controller.rb:1:in `<main>'
+Started POST "/register" for 127.0.0.1 at 2023-05-25 22:11:42 +0300
+  
+NameError (uninitialized constant UsersController::JWTAuthentication):
+  
+app/controllers/users_controller.rb:2:in `<class:UsersController>'
+app/controllers/users_controller.rb:1:in `<main>'
+Started POST "/register" for 127.0.0.1 at 2023-05-25 22:12:44 +0300
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  
+NameError (uninitialized constant UsersController::JWTAuthentication):
+  
+app/controllers/users_controller.rb:2:in `<class:UsersController>'
+app/controllers/users_controller.rb:1:in `<main>'
+Started POST "/register" for 127.0.0.1 at 2023-05-25 22:16:28 +0300
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  
+NameError (uninitialized constant UsersController::JWTAuthentication):
+  
+app/controllers/users_controller.rb:2:in `<class:UsersController>'
+app/controllers/users_controller.rb:1:in `<main>'
+Started POST "/register" for 127.0.0.1 at 2023-05-25 22:16:32 +0300
+  
+NameError (uninitialized constant UsersController::JWTAuthentication):
+  
+app/controllers/users_controller.rb:2:in `<class:UsersController>'
+app/controllers/users_controller.rb:1:in `<main>'
+Started POST "/register" for 127.0.0.1 at 2023-05-25 22:16:32 +0300
+  
+NameError (uninitialized constant UsersController::JWTAuthentication):
+  
+app/controllers/users_controller.rb:2:in `<class:UsersController>'
+app/controllers/users_controller.rb:1:in `<main>'
+Started POST "/register" for 127.0.0.1 at 2023-05-25 22:23:16 +0300
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  
+LoadError (cannot load such file -- /home/moses/Development/code/project/Voting-System/backend/app/concerns/jwt_authentication):
+  
+app/controllers/users_controller.rb:1:in `require_relative'
+app/controllers/users_controller.rb:1:in `<main>'
+Started POST "/register" for 127.0.0.1 at 2023-05-25 22:25:49 +0300
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  
+LoadError (cannot load such file -- /home/moses/Development/code/project/Voting-System/backend/app/concerns/jwt_authentication.rb):
+  
+app/controllers/users_controller.rb:1:in `require_relative'
+app/controllers/users_controller.rb:1:in `<main>'
+Started POST "/register" for 127.0.0.1 at 2023-05-25 22:28:09 +0300
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  
+LoadError (cannot load such file -- /home/moses/Development/code/project/Voting-System/backend/app/concerns/jwt_authentication):
+  
+app/controllers/users_controller.rb:1:in `require_relative'
+app/controllers/users_controller.rb:1:in `<main>'
+Started POST "/register" for 127.0.0.1 at 2023-05-25 22:30:55 +0300
+Processing by UsersController#create as */*
+  Parameters: {"name"=>"mosesz", "email"=>"ochachamoses@gmail.com", "user"=>{"name"=>"mosesz", "email"=>"ochachamoses@gmail.com"}}
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/users_controller.rb:30:in `create'
+  [1m[36mUser Exists? (0.2ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:30:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  ↳ app/controllers/users_controller.rb:30:in `create'
+Completed 422 Unprocessable Entity in 1037ms (Views: 0.2ms | ActiveRecord: 1.4ms | Allocations: 42157)
+
+
+Started POST "/register" for 127.0.0.1 at 2023-05-25 22:31:30 +0300
+Processing by UsersController#create as */*
+  Parameters: {"name"=>"mosesz", "email"=>"ochachamoses@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"mosesz", "email"=>"ochachamoses@gmail.com"}}
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/users_controller.rb:30:in `create'
+  [1m[36mUser Exists? (0.3ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:30:in `create'
+  [1m[36mUser Create (51.2ms)[0m  [1m[32mINSERT INTO "users" ("name", "email", "password_digest", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["name", "mosesz"], ["email", "ochachamoses@gmail.com"], ["password_digest", "[FILTERED]"], ["created_at", "2023-05-25 19:31:30.834033"], ["updated_at", "2023-05-25 19:31:30.834033"]]
+  ↳ app/controllers/users_controller.rb:30:in `create'
+  [1m[36mTRANSACTION (305.0ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/users_controller.rb:30:in `create'
+Completed 201 Created in 674ms (Views: 1.0ms | ActiveRecord: 356.6ms | Allocations: 2816)
+
+
+Started POST "/login" for 127.0.0.1 at 2023-05-25 22:31:44 +0300
+Processing by UsersController#authenticate as */*
+  Parameters: {"name"=>"mosesz", "email"=>"ochachamoses@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"mosesz", "email"=>"ochachamoses@gmail.com"}}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:11:in `authenticate'
+Completed 200 OK in 258ms (Views: 0.1ms | ActiveRecord: 0.3ms | Allocations: 767)
+
+
+Started POST "/login" for 127.0.0.1 at 2023-05-25 22:31:53 +0300
+Processing by UsersController#authenticate as */*
+  Parameters: {"name"=>"mosesz", "email"=>"ochachamoses@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"mosesz", "email"=>"ochachamoses@gmail.com"}}
+  [1m[36mUser Load (0.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:11:in `authenticate'
+Completed 200 OK in 255ms (Views: 0.1ms | ActiveRecord: 0.1ms | Allocations: 611)
+
+
+Started POST "/login" for 127.0.0.1 at 2023-05-25 22:31:55 +0300
+Processing by UsersController#authenticate as */*
+  Parameters: {"name"=>"mosesz", "email"=>"ochachamoses@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"mosesz", "email"=>"ochachamoses@gmail.com"}}
+  [1m[36mUser Load (0.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:11:in `authenticate'
+Completed 200 OK in 260ms (Views: 0.2ms | ActiveRecord: 0.1ms | Allocations: 601)
+
+
+Started POST "/login" for 127.0.0.1 at 2023-05-25 22:31:56 +0300
+Processing by UsersController#authenticate as */*
+  Parameters: {"name"=>"mosesz", "email"=>"ochachamoses@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"mosesz", "email"=>"ochachamoses@gmail.com"}}
+  [1m[36mUser Load (0.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:11:in `authenticate'
+Completed 200 OK in 253ms (Views: 0.1ms | ActiveRecord: 0.1ms | Allocations: 595)
+
+
+Started POST "/login" for 127.0.0.1 at 2023-05-25 22:31:57 +0300
+Processing by UsersController#authenticate as */*
+  Parameters: {"name"=>"mosesz", "email"=>"ochachamoses@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"mosesz", "email"=>"ochachamoses@gmail.com"}}
+  [1m[36mUser Load (0.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:11:in `authenticate'
+Completed 200 OK in 256ms (Views: 0.1ms | ActiveRecord: 0.1ms | Allocations: 597)
+
+
+Started POST "/login" for 127.0.0.1 at 2023-05-25 22:39:04 +0300
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by UsersController#authenticate as */*
+  Parameters: {"name"=>"mosesz", "email"=>"ochachamoses@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"mosesz", "email"=>"ochachamoses@gmail.com"}}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:13:in `authenticate'
+Completed 200 OK in 258ms (Views: 0.2ms | ActiveRecord: 0.3ms | Allocations: 1979)
+
+
+Started POST "/login" for 127.0.0.1 at 2023-05-25 22:39:05 +0300
+Processing by UsersController#authenticate as */*
+  Parameters: {"name"=>"mosesz", "email"=>"ochachamoses@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"mosesz", "email"=>"ochachamoses@gmail.com"}}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:13:in `authenticate'
+Completed 200 OK in 275ms (Views: 0.2ms | ActiveRecord: 0.2ms | Allocations: 596)
+
+
+Started POST "/login" for 127.0.0.1 at 2023-05-25 22:39:07 +0300
+Processing by UsersController#authenticate as */*
+  Parameters: {"name"=>"mosesz", "email"=>"ochachamoses@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"mosesz", "email"=>"ochachamoses@gmail.com"}}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:13:in `authenticate'
+Completed 200 OK in 270ms (Views: 0.2ms | ActiveRecord: 0.2ms | Allocations: 596)
+
+
+Started POST "/login" for 127.0.0.1 at 2023-05-25 22:39:20 +0300
+Processing by UsersController#authenticate as */*
+  Parameters: {"name"=>"mosesz", "email"=>"ochachamoses@gma4il.com", "password"=>"[FILTERED]", "user"=>{"name"=>"mosesz", "email"=>"ochachamoses@gma4il.com"}}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gma4il.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:13:in `authenticate'
+Completed 404 Not Found in 2ms (Views: 0.1ms | ActiveRecord: 0.2ms | Allocations: 503)
+
+
+Started POST "/login" for 127.0.0.1 at 2023-05-25 22:42:53 +0300
+Processing by UsersController#authenticate as */*
+  Parameters: {"name"=>"mosesz", "email"=>"ochachamoses@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"mosesz", "email"=>"ochachamoses@gmail.com"}}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:96:in `check_blocked_status'
+Completed 500 Internal Server Error in 10ms (ActiveRecord: 1.3ms | Allocations: 4076)
+
+
+  
+NoMethodError (undefined method `blocked?' for #<User:0x00007f70348ddd20>):
+  
+app/controllers/users_controller.rb:98:in `check_blocked_status'
+Started POST "/login" for 127.0.0.1 at 2023-05-25 22:46:17 +0300
+Processing by UsersController#authenticate as */*
+  Parameters: {"name"=>"mosesz", "email"=>"ochachamoses@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"mosesz", "email"=>"ochachamoses@gmail.com"}}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:97:in `check_blocked_status'
+Completed 500 Internal Server Error in 13ms (ActiveRecord: 1.4ms | Allocations: 4069)
+
+
+  
+NoMethodError (undefined method `blocked?' for #<User:0x00007f7034c90440>):
+  
+app/controllers/users_controller.rb:99:in `check_blocked_status'
+Started POST "/login" for 127.0.0.1 at 2023-05-25 22:46:30 +0300
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by UsersController#authenticate as */*
+  Parameters: {"name"=>"mosesz", "email"=>"ochachamoses@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"mosesz", "email"=>"ochachamoses@gmail.com"}}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:97:in `check_blocked_status'
+Completed 500 Internal Server Error in 21ms (ActiveRecord: 1.0ms | Allocations: 18750)
+
+
+  
+NoMethodError (undefined method `blocked?' for #<User:0x00007fe5c0e2bf78>):
+  
+app/controllers/users_controller.rb:99:in `check_blocked_status'
+Started POST "/login" for 127.0.0.1 at 2023-05-25 22:49:37 +0300
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by UsersController#authenticate as */*
+  Parameters: {"name"=>"mosesz", "email"=>"ochachamoses@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"mosesz", "email"=>"ochachamoses@gmail.com"}}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:97:in `check_blocked_status'
+Completed 500 Internal Server Error in 22ms (ActiveRecord: 1.0ms | Allocations: 19874)
+
+
+  
+NameError (undefined local variable or method `blocked' for #<User:0x00007f70dce58018>
+Did you mean?  blocked?
+               block):
+  
+app/models/user.rb:8:in `blocked?'
+app/controllers/users_controller.rb:99:in `check_blocked_status'
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (119.7ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Pluck (0.2ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Pluck (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Pluck (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[35m (654.7ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" varchar NOT NULL PRIMARY KEY)[0m
+  [1m[35m (808.7ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" varchar NOT NULL PRIMARY KEY, "value" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to CreateNationals (20230525174443)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.6ms)[0m  [1m[35mCREATE TABLE "nationals" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.2ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525174443"]]
+  [1m[36mTRANSACTION (711.5ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateCounties (20230525174501)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.8ms)[0m  [1m[35mCREATE TABLE "counties" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "national_id" integer NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_340dca35b4"
+FOREIGN KEY ("national_id")
+  REFERENCES "nationals" ("id")
+)[0m
+  [1m[35m (0.4ms)[0m  [1m[35mCREATE INDEX "index_counties_on_national_id" ON "counties" ("national_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.4ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525174501"]]
+  [1m[36mTRANSACTION (740.0ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateSubcounties (20230525174620)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.3ms)[0m  [1m[35mCREATE TABLE "subcounties" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "county_id" integer NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_16a2d8b6d5"
+FOREIGN KEY ("county_id")
+  REFERENCES "counties" ("id")
+)[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE INDEX "index_subcounties_on_county_id" ON "subcounties" ("county_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.2ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525174620"]]
+  [1m[36mTRANSACTION (704.0ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateWards (20230525174751)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (1.0ms)[0m  [1m[35mCREATE TABLE "wards" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "subcounty_id" integer NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_fa1ca7dcba"
+FOREIGN KEY ("subcounty_id")
+  REFERENCES "subcounties" ("id")
+)[0m
+  [1m[35m (0.5ms)[0m  [1m[35mCREATE INDEX "index_wards_on_subcounty_id" ON "wards" ("subcounty_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.5ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525174751"]]
+  [1m[36mTRANSACTION (728.5ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateVoters (20230525175103)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.7ms)[0m  [1m[35mCREATE TABLE "voters" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "id_number" varchar, "name" varchar, "ward_id" integer NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_d1d2681c23"
+FOREIGN KEY ("ward_id")
+  REFERENCES "wards" ("id")
+)[0m
+  [1m[35m (0.4ms)[0m  [1m[35mCREATE INDEX "index_voters_on_ward_id" ON "voters" ("ward_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.6ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525175103"]]
+  [1m[36mTRANSACTION (387.4ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateUsers (20230525175206)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.7ms)[0m  [1m[35mCREATE TABLE "users" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "email" varchar, "password_digest" varchar, "blocked" boolean DEFAULT 0, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.4ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525175206"]]
+  [1m[36mTRANSACTION (452.1ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreatePositions (20230525175241)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.3ms)[0m  [1m[35mCREATE TABLE "positions" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.2ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525175241"]]
+  [1m[36mTRANSACTION (626.6ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateParties (20230525175254)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.3ms)[0m  [1m[35mCREATE TABLE "parties" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.2ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525175254"]]
+  [1m[36mTRANSACTION (705.6ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateCandidates (20230525175304)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.3ms)[0m  [1m[35mCREATE TABLE "candidates" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "party_id" integer NOT NULL, "position_id" integer NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_e0db8e5867"
+FOREIGN KEY ("party_id")
+  REFERENCES "parties" ("id")
+, CONSTRAINT "fk_rails_ee536f9721"
+FOREIGN KEY ("position_id")
+  REFERENCES "positions" ("id")
+)[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE INDEX "index_candidates_on_party_id" ON "candidates" ("party_id")[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE INDEX "index_candidates_on_position_id" ON "candidates" ("position_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.2ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525175304"]]
+  [1m[36mTRANSACTION (520.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.2ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["key", "environment"], ["value", "development"], ["created_at", "2023-05-25 19:53:46.842722"], ["updated_at", "2023-05-25 19:53:46.842722"]]
+  [1m[36mTRANSACTION (388.6ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Started POST "/login" for 127.0.0.1 at 2023-05-25 22:53:57 +0300
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by UsersController#authenticate as */*
+  Parameters: {"name"=>"mosesz", "email"=>"ochachamoses@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"mosesz", "email"=>"ochachamoses@gmail.com"}}
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:97:in `check_blocked_status'
+  [1m[36mCACHE User Load (0.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:15:in `authenticate'
+Completed 404 Not Found in 15ms (Views: 0.3ms | ActiveRecord: 0.7ms | Allocations: 21564)
+
+
+Started POST "/register" for 127.0.0.1 at 2023-05-25 22:54:10 +0300
+Processing by UsersController#create as */*
+  Parameters: {"name"=>"mosesz", "email"=>"ochachamoses@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"mosesz", "email"=>"ochachamoses@gmail.com"}}
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/users_controller.rb:36:in `create'
+  [1m[36mUser Exists? (0.2ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:36:in `create'
+  [1m[36mUser Create (0.4ms)[0m  [1m[32mINSERT INTO "users" ("name", "email", "password_digest", "blocked", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "mosesz"], ["email", "ochachamoses@gmail.com"], ["password_digest", "[FILTERED]"], ["blocked", 0], ["created_at", "2023-05-25 19:54:10.474775"], ["updated_at", "2023-05-25 19:54:10.474775"]]
+  ↳ app/controllers/users_controller.rb:36:in `create'
+  [1m[36mTRANSACTION (382.6ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/users_controller.rb:36:in `create'
+Completed 201 Created in 660ms (Views: 0.9ms | ActiveRecord: 383.9ms | Allocations: 19048)
+
+
+Started POST "/login" for 127.0.0.1 at 2023-05-25 22:54:46 +0300
+Processing by UsersController#authenticate as */*
+  Parameters: {"name"=>"mosesz", "email"=>"ochachamoses@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"mosesz", "email"=>"ochachamoses@gmail.com"}}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:97:in `check_blocked_status'
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:15:in `authenticate'
+Completed 400 Bad Request in 259ms (Views: 0.2ms | ActiveRecord: 0.2ms | Allocations: 997)
+
+
+Started POST "/login" for 127.0.0.1 at 2023-05-25 22:54:54 +0300
+Processing by UsersController#authenticate as */*
+  Parameters: {"name"=>"mosesz", "email"=>"ochachamoses@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"mosesz", "email"=>"ochachamoses@gmail.com"}}
+  [1m[36mUser Load (0.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:97:in `check_blocked_status'
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:15:in `authenticate'
+Completed 400 Bad Request in 255ms (Views: 0.2ms | ActiveRecord: 0.1ms | Allocations: 928)
+
+
+Started POST "/login" for 127.0.0.1 at 2023-05-25 22:54:56 +0300
+Processing by UsersController#authenticate as */*
+  Parameters: {"name"=>"mosesz", "email"=>"ochachamoses@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"mosesz", "email"=>"ochachamoses@gmail.com"}}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:97:in `check_blocked_status'
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:15:in `authenticate'
+Completed 400 Bad Request in 257ms (Views: 0.1ms | ActiveRecord: 0.2ms | Allocations: 930)
+
+
+Started POST "/login" for 127.0.0.1 at 2023-05-25 22:55:07 +0300
+Processing by UsersController#authenticate as */*
+  Parameters: {"name"=>"mosesz", "email"=>"ochachamoses@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"mosesz", "email"=>"ochachamoses@gmail.com"}}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:97:in `check_blocked_status'
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:15:in `authenticate'
+Completed 400 Bad Request in 254ms (Views: 0.1ms | ActiveRecord: 0.2ms | Allocations: 945)
+
+
+Started POST "/login" for 127.0.0.1 at 2023-05-25 22:55:08 +0300
+Processing by UsersController#authenticate as */*
+  Parameters: {"name"=>"mosesz", "email"=>"ochachamoses@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"mosesz", "email"=>"ochachamoses@gmail.com"}}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:97:in `check_blocked_status'
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:15:in `authenticate'
+Completed 400 Bad Request in 259ms (Views: 0.3ms | ActiveRecord: 0.2ms | Allocations: 945)
+
+
+Started POST "/login" for 127.0.0.1 at 2023-05-25 22:55:20 +0300
+Processing by UsersController#authenticate as */*
+  Parameters: {"name"=>"mosesz", "email"=>"ochachamoses@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"mosesz", "email"=>"ochachamoses@gmail.com"}}
+  [1m[36mUser Load (0.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:97:in `check_blocked_status'
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:15:in `authenticate'
+Completed 400 Bad Request in 256ms (Views: 0.1ms | ActiveRecord: 0.1ms | Allocations: 955)
+
+
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Pluck (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Pluck (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Pluck (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[35m (724.1ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" varchar NOT NULL PRIMARY KEY)[0m
+  [1m[35m (694.9ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" varchar NOT NULL PRIMARY KEY, "value" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to CreateNationals (20230525174443)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.5ms)[0m  [1m[35mCREATE TABLE "nationals" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.2ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525174443"]]
+  [1m[36mTRANSACTION (599.0ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateCounties (20230525174501)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.3ms)[0m  [1m[35mCREATE TABLE "counties" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "national_id" integer NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_340dca35b4"
+FOREIGN KEY ("national_id")
+  REFERENCES "nationals" ("id")
+)[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE INDEX "index_counties_on_national_id" ON "counties" ("national_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.3ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525174501"]]
+  [1m[36mTRANSACTION (783.8ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateSubcounties (20230525174620)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.5ms)[0m  [1m[35mCREATE TABLE "subcounties" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "county_id" integer NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_16a2d8b6d5"
+FOREIGN KEY ("county_id")
+  REFERENCES "counties" ("id")
+)[0m
+  [1m[35m (0.3ms)[0m  [1m[35mCREATE INDEX "index_subcounties_on_county_id" ON "subcounties" ("county_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.2ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525174620"]]
+  [1m[36mTRANSACTION (716.4ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateWards (20230525174751)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.7ms)[0m  [1m[35mCREATE TABLE "wards" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "subcounty_id" integer NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_fa1ca7dcba"
+FOREIGN KEY ("subcounty_id")
+  REFERENCES "subcounties" ("id")
+)[0m
+  [1m[35m (0.4ms)[0m  [1m[35mCREATE INDEX "index_wards_on_subcounty_id" ON "wards" ("subcounty_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.4ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525174751"]]
+  [1m[36mTRANSACTION (621.2ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateVoters (20230525175103)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.7ms)[0m  [1m[35mCREATE TABLE "voters" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "id_number" varchar, "name" varchar, "ward_id" integer NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_d1d2681c23"
+FOREIGN KEY ("ward_id")
+  REFERENCES "wards" ("id")
+)[0m
+  [1m[35m (0.9ms)[0m  [1m[35mCREATE INDEX "index_voters_on_ward_id" ON "voters" ("ward_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.4ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525175103"]]
+  [1m[36mTRANSACTION (947.5ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateUsers (20230525175206)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (1.0ms)[0m  [1m[35mCREATE TABLE "users" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "email" varchar, "password_digest" varchar, "blocked" boolean DEFAULT 0, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (1.0ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525175206"]]
+  [1m[36mTRANSACTION (738.4ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreatePositions (20230525175241)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.7ms)[0m  [1m[35mCREATE TABLE "positions" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (1.4ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525175241"]]
+  [1m[36mTRANSACTION (688.4ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateParties (20230525175254)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.5ms)[0m  [1m[35mCREATE TABLE "parties" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (1.0ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525175254"]]
+  [1m[36mTRANSACTION (787.3ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateCandidates (20230525175304)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.9ms)[0m  [1m[35mCREATE TABLE "candidates" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "party_id" integer NOT NULL, "position_id" integer NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_e0db8e5867"
+FOREIGN KEY ("party_id")
+  REFERENCES "parties" ("id")
+, CONSTRAINT "fk_rails_ee536f9721"
+FOREIGN KEY ("position_id")
+  REFERENCES "positions" ("id")
+)[0m
+  [1m[35m (0.5ms)[0m  [1m[35mCREATE INDEX "index_candidates_on_party_id" ON "candidates" ("party_id")[0m
+  [1m[35m (0.5ms)[0m  [1m[35mCREATE INDEX "index_candidates_on_position_id" ON "candidates" ("position_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (3.5ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525175304"]]
+  [1m[36mTRANSACTION (1046.6ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.3ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.4ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["key", "environment"], ["value", "development"], ["created_at", "2023-05-25 20:07:29.202409"], ["updated_at", "2023-05-25 20:07:29.202409"]]
+  [1m[36mTRANSACTION (461.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Started POST "/login" for 127.0.0.1 at 2023-05-25 23:08:28 +0300
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by UsersController#authenticate as */*
+  Parameters: {"name"=>"mosesz", "email"=>"ochachamoses@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"mosesz", "email"=>"ochachamoses@gmail.com"}}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:96:in `check_blocked_status'
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:14:in `authenticate'
+Completed 404 Not Found in 19ms (Views: 0.3ms | ActiveRecord: 0.8ms | Allocations: 21564)
+
+
+Started POST "/register" for 127.0.0.1 at 2023-05-25 23:08:39 +0300
+Processing by UsersController#create as */*
+  Parameters: {"name"=>"mosesz", "email"=>"ochachamoses@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"mosesz", "email"=>"ochachamoses@gmail.com"}}
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/users_controller.rb:35:in `create'
+  [1m[36mUser Exists? (0.2ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:35:in `create'
+  [1m[36mUser Create (0.5ms)[0m  [1m[32mINSERT INTO "users" ("name", "email", "password_digest", "blocked", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "mosesz"], ["email", "ochachamoses@gmail.com"], ["password_digest", "[FILTERED]"], ["blocked", 0], ["created_at", "2023-05-25 20:08:40.053465"], ["updated_at", "2023-05-25 20:08:40.053465"]]
+  ↳ app/controllers/users_controller.rb:35:in `create'
+  [1m[36mTRANSACTION (404.0ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/users_controller.rb:35:in `create'
+Completed 201 Created in 680ms (Views: 1.2ms | ActiveRecord: 405.0ms | Allocations: 19051)
+
+
+Started POST "/login" for 127.0.0.1 at 2023-05-25 23:08:51 +0300
+Processing by UsersController#authenticate as */*
+  Parameters: {"name"=>"mosesz", "email"=>"ochachamoses@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"mosesz", "email"=>"ochachamoses@gmail.com"}}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:96:in `check_blocked_status'
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:14:in `authenticate'
+Completed 400 Bad Request in 267ms (Views: 0.1ms | ActiveRecord: 0.2ms | Allocations: 998)
+
+
+Started POST "/login" for 127.0.0.1 at 2023-05-25 23:15:47 +0300
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by UsersController#authenticate as */*
+  Parameters: {"name"=>"mosesz", "email"=>"ochachamoses@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"mosesz", "email"=>"ochachamoses@gmail.com"}}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:96:in `check_blocked_status'
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:14:in `authenticate'
+Completed 400 Bad Request in 282ms (Views: 0.3ms | ActiveRecord: 1.2ms | Allocations: 37531)
+
+
+Started POST "/login" for 127.0.0.1 at 2023-05-25 23:15:53 +0300
+Processing by UsersController#authenticate as */*
+  Parameters: {"name"=>"mosesz", "email"=>"ochachamoses@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"mosesz", "email"=>"ochachamoses@gmail.com"}}
+  [1m[36mUser Load (0.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:96:in `check_blocked_status'
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:14:in `authenticate'
+Completed 400 Bad Request in 264ms (Views: 0.2ms | ActiveRecord: 0.2ms | Allocations: 946)
+
+
+Started POST "/login" for 127.0.0.1 at 2023-05-25 23:15:54 +0300
+Processing by UsersController#authenticate as */*
+  Parameters: {"name"=>"mosesz", "email"=>"ochachamoses@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"mosesz", "email"=>"ochachamoses@gmail.com"}}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:96:in `check_blocked_status'
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:14:in `authenticate'
+Completed 400 Bad Request in 257ms (Views: 0.1ms | ActiveRecord: 0.2ms | Allocations: 949)
+
+
+Started POST "/login" for 127.0.0.1 at 2023-05-25 23:15:55 +0300
+Processing by UsersController#authenticate as */*
+  Parameters: {"name"=>"mosesz", "email"=>"ochachamoses@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"mosesz", "email"=>"ochachamoses@gmail.com"}}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:96:in `check_blocked_status'
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:14:in `authenticate'
+Completed 400 Bad Request in 258ms (Views: 0.1ms | ActiveRecord: 0.2ms | Allocations: 946)
+
+
+Started POST "/login" for 127.0.0.1 at 2023-05-25 23:15:55 +0300
+Processing by UsersController#authenticate as */*
+  Parameters: {"name"=>"mosesz", "email"=>"ochachamoses@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"mosesz", "email"=>"ochachamoses@gmail.com"}}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:96:in `check_blocked_status'
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:14:in `authenticate'
+Completed 400 Bad Request in 259ms (Views: 0.2ms | ActiveRecord: 0.2ms | Allocations: 945)
+
+
+Started POST "/login" for 127.0.0.1 at 2023-05-25 23:17:58 +0300
+Processing by UsersController#authenticate as */*
+  Parameters: {"name"=>"mosesz", "email"=>"ochachamoses@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"mosesz", "email"=>"ochachamoses@gmail.com"}}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:96:in `check_blocked_status'
+Filter chain halted as :check_blocked_status rendered or redirected
+Completed 401 Unauthorized in 5ms (Views: 0.2ms | ActiveRecord: 1.1ms | Allocations: 2222)
+
+
+Started POST "/login" for 127.0.0.1 at 2023-05-25 23:18:04 +0300
+Processing by UsersController#authenticate as */*
+  Parameters: {"name"=>"mosesz", "email"=>"ochachamoses@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"mosesz", "email"=>"ochachamoses@gmail.com"}}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:96:in `check_blocked_status'
+Filter chain halted as :check_blocked_status rendered or redirected
+Completed 401 Unauthorized in 2ms (Views: 0.3ms | ActiveRecord: 0.2ms | Allocations: 526)
+
+
+Started POST "/login" for 127.0.0.1 at 2023-05-25 23:18:05 +0300
+Processing by UsersController#authenticate as */*
+  Parameters: {"name"=>"mosesz", "email"=>"ochachamoses@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"mosesz", "email"=>"ochachamoses@gmail.com"}}
+  [1m[36mUser Load (0.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:96:in `check_blocked_status'
+Filter chain halted as :check_blocked_status rendered or redirected
+Completed 401 Unauthorized in 2ms (Views: 0.2ms | ActiveRecord: 0.1ms | Allocations: 526)
+
+
+Started POST "/login" for 127.0.0.1 at 2023-05-25 23:20:03 +0300
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  
+SyntaxError (/home/moses/Development/code/project/Voting-System/backend/app/controllers/users_controller.rb:98: syntax error, unexpected '='
+    if user&.blocked? = true
+                      ^
+/home/moses/Development/code/project/Voting-System/backend/app/controllers/users_controller.rb:116: syntax error, unexpected `end', expecting end-of-input):
+  
+app/controllers/users_controller.rb:98: syntax error, unexpected '='
+app/controllers/users_controller.rb:116: syntax error, unexpected `end', expecting end-of-input
+app/controllers/users_controller.rb:98: syntax error, unexpected '='
+app/controllers/users_controller.rb:116: syntax error, unexpected `end', expecting end-of-input
+Started POST "/login" for 127.0.0.1 at 2023-05-25 23:21:53 +0300
+Processing by UsersController#authenticate as */*
+  Parameters: {"name"=>"mosesz", "email"=>"ochachamoses@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"mosesz", "email"=>"ochachamoses@gmail.com"}}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:96:in `check_blocked_status'
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:14:in `authenticate'
+Completed 400 Bad Request in 295ms (Views: 0.2ms | ActiveRecord: 1.5ms | Allocations: 37538)
+
+
+Started POST "/login" for 127.0.0.1 at 2023-05-25 23:22:41 +0300
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by UsersController#authenticate as */*
+  Parameters: {"name"=>"mosesz", "email"=>"ochachamoses@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"mosesz", "email"=>"ochachamoses@gmail.com"}}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:96:in `check_blocked_status'
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:14:in `authenticate'
+Completed 400 Bad Request in 284ms (Views: 0.2ms | ActiveRecord: 0.9ms | Allocations: 37531)
+
+
+Started POST "/login" for 127.0.0.1 at 2023-05-25 23:29:05 +0300
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by UsersController#authenticate as */*
+  Parameters: {"name"=>"mosesz", "email"=>"ochachamoses@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"mosesz", "email"=>"ochachamoses@gmail.com"}}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:96:in `check_blocked_status'
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:14:in `authenticate'
+Completed 400 Bad Request in 295ms (Views: 0.3ms | ActiveRecord: 1.2ms | Allocations: 37492)
+
+
+Started POST "/login" for 127.0.0.1 at 2023-05-25 23:31:05 +0300
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by UsersController#authenticate as */*
+  Parameters: {"name"=>"mosesz", "email"=>"ochachamoses@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"mosesz", "email"=>"ochachamoses@gmail.com"}}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:96:in `check_blocked_status'
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:14:in `authenticate'
+Completed 400 Bad Request in 298ms (Views: 0.2ms | ActiveRecord: 1.7ms | Allocations: 37535)
+
+
+Started POST "/login" for 127.0.0.1 at 2023-05-25 23:32:28 +0300
+Processing by UsersController#authenticate as */*
+  Parameters: {"name"=>"mosesz", "email"=>"ochachamoses@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"mosesz", "email"=>"ochachamoses@gmail.com"}}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:96:in `check_blocked_status'
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:14:in `authenticate'
+Completed 400 Bad Request in 262ms (Views: 0.2ms | ActiveRecord: 1.8ms | Allocations: 2673)
+
+
+Started POST "/login" for 127.0.0.1 at 2023-05-25 23:32:29 +0300
+Processing by UsersController#authenticate as */*
+  Parameters: {"name"=>"mosesz", "email"=>"ochachamoses@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"mosesz", "email"=>"ochachamoses@gmail.com"}}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:96:in `check_blocked_status'
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:14:in `authenticate'
+Completed 400 Bad Request in 281ms (Views: 0.2ms | ActiveRecord: 0.2ms | Allocations: 945)
+
+
+Started POST "/login" for 127.0.0.1 at 2023-05-25 23:32:38 +0300
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by UsersController#authenticate as */*
+  Parameters: {"name"=>"mosesz", "email"=>"ochachamoses@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"mosesz", "email"=>"ochachamoses@gmail.com"}}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:96:in `check_blocked_status'
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:14:in `authenticate'
+Completed 400 Bad Request in 285ms (Views: 0.2ms | ActiveRecord: 1.0ms | Allocations: 37531)
+
+
+Started POST "/login" for 127.0.0.1 at 2023-05-25 23:35:25 +0300
+Processing by UsersController#authenticate as */*
+  Parameters: {"name"=>"mosesz", "email"=>"ochachamoses@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"mosesz", "email"=>"ochachamoses@gmail.com"}}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:94:in `check_blocked_status'
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:14:in `authenticate'
+Completed 400 Bad Request in 262ms (Views: 0.2ms | ActiveRecord: 1.1ms | Allocations: 2681)
+
+
+Started POST "/login" for 127.0.0.1 at 2023-05-25 23:35:26 +0300
+Processing by UsersController#authenticate as */*
+  Parameters: {"name"=>"mosesz", "email"=>"ochachamoses@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"mosesz", "email"=>"ochachamoses@gmail.com"}}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:94:in `check_blocked_status'
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:14:in `authenticate'
+Completed 400 Bad Request in 259ms (Views: 0.1ms | ActiveRecord: 0.2ms | Allocations: 961)
+
+
+Started POST "/login" for 127.0.0.1 at 2023-05-25 23:35:37 +0300
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by UsersController#authenticate as */*
+  Parameters: {"name"=>"mosesz", "email"=>"ochachamoses@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"mosesz", "email"=>"ochachamoses@gmail.com"}}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:94:in `check_blocked_status'
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:14:in `authenticate'
+Completed 400 Bad Request in 285ms (Views: 0.2ms | ActiveRecord: 1.0ms | Allocations: 37544)
+
+
+Started POST "/login" for 127.0.0.1 at 2023-05-25 23:36:41 +0300
+Processing by UsersController#authenticate as */*
+  Parameters: {"name"=>"mosesz", "email"=>"ochachamoses@gmail.com", "password"=>"[FILTERED]", "blocked"=>true, "user"=>{"name"=>"mosesz", "email"=>"ochachamoses@gmail.com", "blocked"=>true}}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:94:in `check_blocked_status'
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:14:in `authenticate'
+Completed 400 Bad Request in 262ms (Views: 0.2ms | ActiveRecord: 0.2ms | Allocations: 958)
+
+
+Started POST "/login" for 127.0.0.1 at 2023-05-25 23:37:06 +0300
+Processing by UsersController#authenticate as */*
+  Parameters: {"name"=>"mosesz", "email"=>"ochachamoses@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"mosesz", "email"=>"ochachamoses@gmail.com"}}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:94:in `check_blocked_status'
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:14:in `authenticate'
+Completed 400 Bad Request in 261ms (Views: 0.2ms | ActiveRecord: 0.2ms | Allocations: 957)
+
+
+Started POST "/login" for 127.0.0.1 at 2023-05-25 23:38:52 +0300
+  
+SyntaxError (/home/moses/Development/code/project/Voting-System/backend/app/controllers/users_controller.rb:20: syntax error, unexpected '}', expecting =>
+...mail: user.email, user.blocked})
+...                              ^
+):
+  
+app/controllers/users_controller.rb:20: syntax error, unexpected '}', expecting =>
+app/controllers/users_controller.rb:20: syntax error, unexpected '}', expecting =>
+Started POST "/login" for 127.0.0.1 at 2023-05-25 23:39:36 +0300
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by UsersController#authenticate as */*
+  Parameters: {"name"=>"mosesz", "email"=>"ochachamoses@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"mosesz", "email"=>"ochachamoses@gmail.com"}}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:94:in `check_blocked_status'
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:14:in `authenticate'
+Completed 400 Bad Request in 284ms (Views: 0.2ms | ActiveRecord: 1.0ms | Allocations: 37539)
+
+
+Started POST "/login" for 127.0.0.1 at 2023-05-25 23:53:41 +0300
+  
+NoMethodError (undefined method `before_action' for User (call 'User.connection' to establish a connection):Class
+Did you mean?  before_commit):
+  
+app/models/user.rb:2:in `<class:User>'
+app/models/user.rb:1:in `<main>'
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Pluck (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Pluck (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Pluck (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[35m (454.7ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" varchar NOT NULL PRIMARY KEY)[0m
+  [1m[35m (426.0ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" varchar NOT NULL PRIMARY KEY, "value" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to CreateNationals (20230525174443)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.5ms)[0m  [1m[35mCREATE TABLE "nationals" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.2ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525174443"]]
+  [1m[36mTRANSACTION (377.6ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateCounties (20230525174501)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.8ms)[0m  [1m[35mCREATE TABLE "counties" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "national_id" integer NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_340dca35b4"
+FOREIGN KEY ("national_id")
+  REFERENCES "nationals" ("id")
+)[0m
+  [1m[35m (0.3ms)[0m  [1m[35mCREATE INDEX "index_counties_on_national_id" ON "counties" ("national_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.4ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525174501"]]
+  [1m[36mTRANSACTION (514.6ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateSubcounties (20230525174620)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.7ms)[0m  [1m[35mCREATE TABLE "subcounties" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "county_id" integer NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_16a2d8b6d5"
+FOREIGN KEY ("county_id")
+  REFERENCES "counties" ("id")
+)[0m
+  [1m[35m (0.4ms)[0m  [1m[35mCREATE INDEX "index_subcounties_on_county_id" ON "subcounties" ("county_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.3ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525174620"]]
+  [1m[36mTRANSACTION (698.8ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateWards (20230525174751)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.3ms)[0m  [1m[35mCREATE TABLE "wards" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "subcounty_id" integer NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_fa1ca7dcba"
+FOREIGN KEY ("subcounty_id")
+  REFERENCES "subcounties" ("id")
+)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_wards_on_subcounty_id" ON "wards" ("subcounty_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.2ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525174751"]]
+  [1m[36mTRANSACTION (648.2ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateVoters (20230525175103)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.6ms)[0m  [1m[35mCREATE TABLE "voters" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "id_number" varchar, "name" varchar, "ward_id" integer NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_d1d2681c23"
+FOREIGN KEY ("ward_id")
+  REFERENCES "wards" ("id")
+)[0m
+  [1m[35m (0.3ms)[0m  [1m[35mCREATE INDEX "index_voters_on_ward_id" ON "voters" ("ward_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.4ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525175103"]]
+  [1m[36mTRANSACTION (451.5ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateUsers (20230525175206)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE TABLE "users" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "email" varchar, "password_digest" varchar, "blocked" boolean DEFAULT 0, "failed_login_attempts" integer DEFAULT 0, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_users_on_email" ON "users" ("email")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.2ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525175206"]]
+  [1m[36mTRANSACTION (487.9ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreatePositions (20230525175241)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.6ms)[0m  [1m[35mCREATE TABLE "positions" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.3ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525175241"]]
+  [1m[36mTRANSACTION (397.5ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateParties (20230525175254)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.3ms)[0m  [1m[35mCREATE TABLE "parties" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.2ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525175254"]]
+  [1m[36mTRANSACTION (449.0ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateCandidates (20230525175304)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.8ms)[0m  [1m[35mCREATE TABLE "candidates" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "party_id" integer NOT NULL, "position_id" integer NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_e0db8e5867"
+FOREIGN KEY ("party_id")
+  REFERENCES "parties" ("id")
+, CONSTRAINT "fk_rails_ee536f9721"
+FOREIGN KEY ("position_id")
+  REFERENCES "positions" ("id")
+)[0m
+  [1m[35m (0.4ms)[0m  [1m[35mCREATE INDEX "index_candidates_on_party_id" ON "candidates" ("party_id")[0m
+  [1m[35m (0.5ms)[0m  [1m[35mCREATE INDEX "index_candidates_on_position_id" ON "candidates" ("position_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.6ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525175304"]]
+  [1m[36mTRANSACTION (628.5ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.3ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.4ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["key", "environment"], ["value", "development"], ["created_at", "2023-05-25 20:59:29.334777"], ["updated_at", "2023-05-25 20:59:29.334777"]]
+  [1m[36mTRANSACTION (437.7ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Started POST "/login" for 127.0.0.1 at 2023-05-25 23:59:43 +0300
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by UsersController#authenticate as */*
+  Parameters: {"name"=>"mosesz", "email"=>"ochachamoses@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"mosesz", "email"=>"ochachamoses@gmail.com"}}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:96:in `check_blocked_status'
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:14:in `authenticate'
+Completed 404 Not Found in 12ms (Views: 0.4ms | ActiveRecord: 0.6ms | Allocations: 21578)
+
+
+Started POST "/register" for 127.0.0.1 at 2023-05-25 23:59:52 +0300
+Processing by UsersController#create as */*
+  Parameters: {"name"=>"mosesz", "email"=>"ochachamoses@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"mosesz", "email"=>"ochachamoses@gmail.com"}}
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/users_controller.rb:38:in `create'
+  [1m[36mUser Exists? (0.2ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:38:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  ↳ app/controllers/users_controller.rb:38:in `create'
+Completed 422 Unprocessable Entity in 245ms (Views: 0.5ms | ActiveRecord: 0.8ms | Allocations: 20288)
+
+
+Started POST "/register" for 127.0.0.1 at 2023-05-26 00:00:31 +0300
+Error occurred while parsing request parameters.
+Contents:
+
+{
+  "name": "mosesz",
+  "email": "ochachamoses@gmail.com",
+  "password": "12245"
+  "password_confirmation": "12245"
+}
+Processing by UsersController#create as */*
+Completed 400 Bad Request in 1ms (ActiveRecord: 0.0ms | Allocations: 127)
+
+
+  
+ActionDispatch::Http::Parameters::ParseError (Error occurred while parsing request parameters):
+  
+app/controllers/users_controller.rb:59:in `user_params'
+app/controllers/users_controller.rb:36:in `create'
+Started POST "/register" for 127.0.0.1 at 2023-05-26 00:00:38 +0300
+Processing by UsersController#create as */*
+  Parameters: {"name"=>"mosesz", "email"=>"ochachamoses@gmail.com", "password"=>"[FILTERED]", "password_confirmation"=>"[FILTERED]", "user"=>{"name"=>"mosesz", "email"=>"ochachamoses@gmail.com"}}
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/users_controller.rb:38:in `create'
+  [1m[36mUser Exists? (0.3ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:38:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  ↳ app/controllers/users_controller.rb:38:in `create'
+Completed 422 Unprocessable Entity in 6ms (Views: 0.3ms | ActiveRecord: 0.4ms | Allocations: 2292)
+
+
+Started POST "/register" for 127.0.0.1 at 2023-05-26 00:01:16 +0300
+Processing by UsersController#create as */*
+  Parameters: {"name"=>"mosesz", "email"=>"ochachamoses@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"mosesz", "email"=>"ochachamoses@gmail.com"}}
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/users_controller.rb:38:in `create'
+  [1m[36mUser Exists? (0.2ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:38:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  ↳ app/controllers/users_controller.rb:38:in `create'
+Completed 422 Unprocessable Entity in 6ms (Views: 0.2ms | ActiveRecord: 0.4ms | Allocations: 2292)
+
+
+Started POST "/register" for 127.0.0.1 at 2023-05-26 00:01:17 +0300
+Processing by UsersController#create as */*
+  Parameters: {"name"=>"mosesz", "email"=>"ochachamoses@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"mosesz", "email"=>"ochachamoses@gmail.com"}}
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/users_controller.rb:38:in `create'
+  [1m[36mUser Exists? (0.2ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ochachamoses@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:38:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  ↳ app/controllers/users_controller.rb:38:in `create'
+Completed 422 Unprocessable Entity in 6ms (Views: 0.2ms | ActiveRecord: 0.4ms | Allocations: 2275)
+
+
+Started POST "/register" for 127.0.0.1 at 2023-05-26 00:03:09 +0300
+Processing by UsersController#create as */*
+  Parameters: {"name"=>"moses", "email"=>"ocbcjsb@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"moses", "email"=>"ocbcjsb@gmail.com"}}
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/users_controller.rb:38:in `create'
+  [1m[36mUser Exists? (0.2ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ocbcjsb@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:38:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  ↳ app/controllers/users_controller.rb:38:in `create'
+Completed 422 Unprocessable Entity in 6ms (Views: 0.2ms | ActiveRecord: 0.5ms | Allocations: 2273)
+
+
+Started POST "/register" for 127.0.0.1 at 2023-05-26 00:03:10 +0300
+Processing by UsersController#create as */*
+  Parameters: {"name"=>"moses", "email"=>"ocbcjsb@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"moses", "email"=>"ocbcjsb@gmail.com"}}
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/users_controller.rb:38:in `create'
+  [1m[36mUser Exists? (0.2ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ocbcjsb@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:38:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  ↳ app/controllers/users_controller.rb:38:in `create'
+Completed 422 Unprocessable Entity in 5ms (Views: 0.2ms | ActiveRecord: 0.4ms | Allocations: 2289)
+
+
+Started POST "/register" for 127.0.0.1 at 2023-05-26 00:04:13 +0300
+Processing by UsersController#create as */*
+  Parameters: {"name"=>"moses", "email"=>"ocbcjsb@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"moses", "email"=>"ocbcjsb@gmail.com"}}
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/users_controller.rb:38:in `create'
+  [1m[36mUser Exists? (0.2ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ocbcjsb@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:38:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  ↳ app/controllers/users_controller.rb:38:in `create'
+Completed 422 Unprocessable Entity in 6ms (Views: 0.2ms | ActiveRecord: 0.5ms | Allocations: 2273)
+
+
+Started POST "/register" for 127.0.0.1 at 2023-05-26 00:04:14 +0300
+Processing by UsersController#create as */*
+  Parameters: {"name"=>"moses", "email"=>"ocbcjsb@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"moses", "email"=>"ocbcjsb@gmail.com"}}
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/users_controller.rb:38:in `create'
+  [1m[36mUser Exists? (0.2ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ocbcjsb@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:38:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  ↳ app/controllers/users_controller.rb:38:in `create'
+Completed 422 Unprocessable Entity in 5ms (Views: 0.2ms | ActiveRecord: 0.3ms | Allocations: 2272)
+
+
+Started POST "/register" for 127.0.0.1 at 2023-05-26 00:10:32 +0300
+Processing by UsersController#create as */*
+  Parameters: {"name"=>"moses", "email"=>"ocbcjsb@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"moses", "email"=>"ocbcjsb@gmail.com"}}
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/users_controller.rb:38:in `create'
+  [1m[36mUser Exists? (0.3ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ocbcjsb@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:38:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  ↳ app/controllers/users_controller.rb:38:in `create'
+Completed 422 Unprocessable Entity in 7ms (Views: 0.4ms | ActiveRecord: 1.0ms | Allocations: 2386)
+
+
+Started POST "/register" for 127.0.0.1 at 2023-05-26 00:10:33 +0300
+Processing by UsersController#create as */*
+  Parameters: {"name"=>"moses", "email"=>"ocbcjsb@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"moses", "email"=>"ocbcjsb@gmail.com"}}
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/users_controller.rb:38:in `create'
+  [1m[36mUser Exists? (0.2ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ocbcjsb@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:38:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  ↳ app/controllers/users_controller.rb:38:in `create'
+Completed 422 Unprocessable Entity in 5ms (Views: 0.2ms | ActiveRecord: 0.3ms | Allocations: 2272)
+
+
+Started POST "/register" for 127.0.0.1 at 2023-05-26 00:11:45 +0300
+Processing by UsersController#create as */*
+  Parameters: {"name"=>"moses", "email"=>"ocbcjsb@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"moses", "email"=>"ocbcjsb@gmail.com"}}
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/users_controller.rb:38:in `create'
+  [1m[36mUser Exists? (0.2ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ocbcjsb@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:38:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  ↳ app/controllers/users_controller.rb:38:in `create'
+Completed 422 Unprocessable Entity in 11ms (Views: 0.2ms | ActiveRecord: 1.7ms | Allocations: 4329)
+
+
+Started POST "/register" for 127.0.0.1 at 2023-05-26 00:11:46 +0300
+Processing by UsersController#create as */*
+  Parameters: {"name"=>"moses", "email"=>"ocbcjsb@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"moses", "email"=>"ocbcjsb@gmail.com"}}
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/users_controller.rb:38:in `create'
+  [1m[36mUser Exists? (0.2ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ocbcjsb@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:38:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  ↳ app/controllers/users_controller.rb:38:in `create'
+Completed 422 Unprocessable Entity in 5ms (Views: 0.1ms | ActiveRecord: 0.3ms | Allocations: 2273)
+
+
+Started POST "/register" for 127.0.0.1 at 2023-05-26 00:11:54 +0300
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by UsersController#create as */*
+  Parameters: {"name"=>"moses", "email"=>"ocbcjsb@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"moses", "email"=>"ocbcjsb@gmail.com"}}
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/users_controller.rb:38:in `create'
+  [1m[36mUser Exists? (0.3ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ocbcjsb@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:38:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  ↳ app/controllers/users_controller.rb:38:in `create'
+Completed 422 Unprocessable Entity in 29ms (Views: 0.6ms | ActiveRecord: 1.3ms | Allocations: 40813)
+
+
+Started POST "/register" for 127.0.0.1 at 2023-05-26 00:12:40 +0300
+Processing by UsersController#create as */*
+  Parameters: {"name"=>"moses", "email"=>"ocbcjsb@gmail.com", "password"=>"[FILTERED]", "password_confirmation"=>"[FILTERED]", "user"=>{"name"=>"moses", "email"=>"ocbcjsb@gmail.com"}}
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/users_controller.rb:38:in `create'
+  [1m[36mUser Exists? (0.3ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ocbcjsb@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:38:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  ↳ app/controllers/users_controller.rb:38:in `create'
+Completed 422 Unprocessable Entity in 9ms (Views: 0.3ms | ActiveRecord: 0.5ms | Allocations: 2294)
+
+
+Started POST "/register" for 127.0.0.1 at 2023-05-26 00:12:49 +0300
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by UsersController#create as */*
+  Parameters: {"name"=>"moses", "email"=>"ocbcjsb@gmail.com", "password"=>"[FILTERED]", "password_confirmation"=>"[FILTERED]", "user"=>{"name"=>"moses", "email"=>"ocbcjsb@gmail.com"}}
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/users_controller.rb:38:in `create'
+  [1m[36mUser Exists? (0.2ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ocbcjsb@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:38:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  ↳ app/controllers/users_controller.rb:38:in `create'
+Completed 422 Unprocessable Entity in 27ms (Views: 0.2ms | ActiveRecord: 1.1ms | Allocations: 40813)
+
+
+Started POST "/register" for 127.0.0.1 at 2023-05-26 00:17:02 +0300
+Processing by UsersController#create as */*
+  Parameters: {"name"=>"moses", "email"=>"ocbcjsb@gmail.com", "password"=>"[FILTERED]", "password_confirmation"=>"[FILTERED]", "user"=>{"name"=>"moses", "email"=>"ocbcjsb@gmail.com"}}
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/users_controller.rb:38:in `create'
+  [1m[36mUser Exists? (0.2ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ocbcjsb@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:38:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  ↳ app/controllers/users_controller.rb:38:in `create'
+Completed 422 Unprocessable Entity in 9ms (Views: 0.2ms | ActiveRecord: 1.6ms | Allocations: 4342)
+
+
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Pluck (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Pluck (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Pluck (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[35m (656.7ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" varchar NOT NULL PRIMARY KEY)[0m
+  [1m[35m (613.1ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" varchar NOT NULL PRIMARY KEY, "value" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to CreateNationals (20230525174443)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.6ms)[0m  [1m[35mCREATE TABLE "nationals" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.2ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525174443"]]
+  [1m[36mTRANSACTION (423.2ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateCounties (20230525174501)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.3ms)[0m  [1m[35mCREATE TABLE "counties" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "national_id" integer NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_340dca35b4"
+FOREIGN KEY ("national_id")
+  REFERENCES "nationals" ("id")
+)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_counties_on_national_id" ON "counties" ("national_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.2ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525174501"]]
+  [1m[36mTRANSACTION (516.4ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateSubcounties (20230525174620)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.8ms)[0m  [1m[35mCREATE TABLE "subcounties" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "county_id" integer NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_16a2d8b6d5"
+FOREIGN KEY ("county_id")
+  REFERENCES "counties" ("id")
+)[0m
+  [1m[35m (0.4ms)[0m  [1m[35mCREATE INDEX "index_subcounties_on_county_id" ON "subcounties" ("county_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.5ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525174620"]]
+  [1m[36mTRANSACTION (497.7ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateWards (20230525174751)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.3ms)[0m  [1m[35mCREATE TABLE "wards" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "subcounty_id" integer NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_fa1ca7dcba"
+FOREIGN KEY ("subcounty_id")
+  REFERENCES "subcounties" ("id")
+)[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE INDEX "index_wards_on_subcounty_id" ON "wards" ("subcounty_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.2ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525174751"]]
+  [1m[36mTRANSACTION (339.4ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateVoters (20230525175103)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.4ms)[0m  [1m[35mCREATE TABLE "voters" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "id_number" varchar, "name" varchar, "ward_id" integer NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_d1d2681c23"
+FOREIGN KEY ("ward_id")
+  REFERENCES "wards" ("id")
+)[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE INDEX "index_voters_on_ward_id" ON "voters" ("ward_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.2ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525175103"]]
+  [1m[36mTRANSACTION (793.6ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateUsers (20230525175206)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.3ms)[0m  [1m[35mCREATE TABLE "users" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "email" varchar, "password_digest" varchar, "blocked" boolean DEFAULT 0, "failed_login_attempts" integer DEFAULT 0, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_users_on_email" ON "users" ("email")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.2ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525175206"]]
+  [1m[36mTRANSACTION (515.1ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreatePositions (20230525175241)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.7ms)[0m  [1m[35mCREATE TABLE "positions" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.5ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525175241"]]
+  [1m[36mTRANSACTION (545.5ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateParties (20230525175254)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.3ms)[0m  [1m[35mCREATE TABLE "parties" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.2ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525175254"]]
+  [1m[36mTRANSACTION (486.2ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateCandidates (20230525175304)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.6ms)[0m  [1m[35mCREATE TABLE "candidates" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "party_id" integer NOT NULL, "position_id" integer NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_e0db8e5867"
+FOREIGN KEY ("party_id")
+  REFERENCES "parties" ("id")
+, CONSTRAINT "fk_rails_ee536f9721"
+FOREIGN KEY ("position_id")
+  REFERENCES "positions" ("id")
+)[0m
+  [1m[35m (0.4ms)[0m  [1m[35mCREATE INDEX "index_candidates_on_party_id" ON "candidates" ("party_id")[0m
+  [1m[35m (0.4ms)[0m  [1m[35mCREATE INDEX "index_candidates_on_position_id" ON "candidates" ("position_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.3ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525175304"]]
+  [1m[36mTRANSACTION (466.8ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.4ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.4ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["key", "environment"], ["value", "development"], ["created_at", "2023-05-25 21:17:45.662316"], ["updated_at", "2023-05-25 21:17:45.662316"]]
+  [1m[36mTRANSACTION (483.7ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Started POST "/register" for 127.0.0.1 at 2023-05-26 00:17:51 +0300
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by UsersController#create as */*
+  Parameters: {"name"=>"moses", "email"=>"ocbcjsb@gmail.com", "password"=>"[FILTERED]", "password_confirmation"=>"[FILTERED]", "user"=>{"name"=>"moses", "email"=>"ocbcjsb@gmail.com"}}
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/users_controller.rb:38:in `create'
+  [1m[36mUser Exists? (0.2ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ocbcjsb@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:38:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  ↳ app/controllers/users_controller.rb:38:in `create'
+Completed 422 Unprocessable Entity in 30ms (Views: 0.3ms | ActiveRecord: 0.9ms | Allocations: 40795)
+
+
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Pluck (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Pluck (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Pluck (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[35m (247.5ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" varchar NOT NULL PRIMARY KEY)[0m
+  [1m[35m (205.8ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" varchar NOT NULL PRIMARY KEY, "value" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to CreateNationals (20230525174443)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.5ms)[0m  [1m[35mCREATE TABLE "nationals" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.2ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525174443"]]
+  [1m[36mTRANSACTION (330.0ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateCounties (20230525174501)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.6ms)[0m  [1m[35mCREATE TABLE "counties" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "national_id" integer NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_340dca35b4"
+FOREIGN KEY ("national_id")
+  REFERENCES "nationals" ("id")
+)[0m
+  [1m[35m (0.3ms)[0m  [1m[35mCREATE INDEX "index_counties_on_national_id" ON "counties" ("national_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.4ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525174501"]]
+  [1m[36mTRANSACTION (341.0ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateSubcounties (20230525174620)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.7ms)[0m  [1m[35mCREATE TABLE "subcounties" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "county_id" integer NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_16a2d8b6d5"
+FOREIGN KEY ("county_id")
+  REFERENCES "counties" ("id")
+)[0m
+  [1m[35m (0.5ms)[0m  [1m[35mCREATE INDEX "index_subcounties_on_county_id" ON "subcounties" ("county_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.5ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525174620"]]
+  [1m[36mTRANSACTION (281.4ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateWards (20230525174751)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.7ms)[0m  [1m[35mCREATE TABLE "wards" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "subcounty_id" integer NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_fa1ca7dcba"
+FOREIGN KEY ("subcounty_id")
+  REFERENCES "subcounties" ("id")
+)[0m
+  [1m[35m (0.5ms)[0m  [1m[35mCREATE INDEX "index_wards_on_subcounty_id" ON "wards" ("subcounty_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.5ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525174751"]]
+  [1m[36mTRANSACTION (395.0ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateVoters (20230525175103)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.9ms)[0m  [1m[35mCREATE TABLE "voters" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "id_number" varchar, "name" varchar, "ward_id" integer NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_d1d2681c23"
+FOREIGN KEY ("ward_id")
+  REFERENCES "wards" ("id")
+)[0m
+  [1m[35m (0.4ms)[0m  [1m[35mCREATE INDEX "index_voters_on_ward_id" ON "voters" ("ward_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.4ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525175103"]]
+  [1m[36mTRANSACTION (418.4ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateUsers (20230525175206)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.7ms)[0m  [1m[35mCREATE TABLE "users" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "email" varchar, "password_digest" varchar, "blocked" boolean DEFAULT 0, "failed_login_attempts" integer DEFAULT 0, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.4ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_users_on_email" ON "users" ("email")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.3ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525175206"]]
+  [1m[36mTRANSACTION (426.7ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreatePositions (20230525175241)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.9ms)[0m  [1m[35mCREATE TABLE "positions" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (2.6ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525175241"]]
+  [1m[36mTRANSACTION (545.2ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateParties (20230525175254)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (2.1ms)[0m  [1m[35mCREATE TABLE "parties" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (2.3ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525175254"]]
+  [1m[36mTRANSACTION (464.2ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateCandidates (20230525175304)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.7ms)[0m  [1m[35mCREATE TABLE "candidates" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "party_id" integer NOT NULL, "position_id" integer NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_e0db8e5867"
+FOREIGN KEY ("party_id")
+  REFERENCES "parties" ("id")
+, CONSTRAINT "fk_rails_ee536f9721"
+FOREIGN KEY ("position_id")
+  REFERENCES "positions" ("id")
+)[0m
+  [1m[35m (0.4ms)[0m  [1m[35mCREATE INDEX "index_candidates_on_party_id" ON "candidates" ("party_id")[0m
+  [1m[35m (0.4ms)[0m  [1m[35mCREATE INDEX "index_candidates_on_position_id" ON "candidates" ("position_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.5ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230525175304"]]
+  [1m[36mTRANSACTION (334.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.2ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.3ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["key", "environment"], ["value", "development"], ["created_at", "2023-05-25 21:22:07.436780"], ["updated_at", "2023-05-25 21:22:07.436780"]]
+  [1m[36mTRANSACTION (337.7ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Started POST "/register" for 127.0.0.1 at 2023-05-26 00:22:46 +0300
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by UsersController#create as */*
+  Parameters: {"name"=>"moses", "email"=>"ocbcjsb@gmail.com", "password"=>"[FILTERED]", "password_confirmation"=>"[FILTERED]", "user"=>{"name"=>"moses", "email"=>"ocbcjsb@gmail.com"}}
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/users_controller.rb:38:in `create'
+  [1m[36mUser Exists? (0.3ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ocbcjsb@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:38:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  ↳ app/controllers/users_controller.rb:38:in `create'
+Completed 422 Unprocessable Entity in 28ms (Views: 0.2ms | ActiveRecord: 1.2ms | Allocations: 40795)
+
+
+Started POST "/register" for 127.0.0.1 at 2023-05-26 00:30:04 +0300
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by UsersController#create as */*
+  Parameters: {"name"=>"moses", "email"=>"ocbcjsb@gmail.com", "password"=>"[FILTERED]", "password_confirmation"=>"[FILTERED]", "user"=>{"name"=>"moses", "email"=>"ocbcjsb@gmail.com"}}
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/users_controller.rb:38:in `create'
+  [1m[36mUser Exists? (0.2ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ocbcjsb@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:38:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  ↳ app/controllers/users_controller.rb:38:in `create'
+Completed 422 Unprocessable Entity in 37ms (Views: 0.3ms | ActiveRecord: 1.3ms | Allocations: 40813)
+
+
+Started POST "/login" for 127.0.0.1 at 2023-05-26 00:31:43 +0300
+Processing by UsersController#authenticate as */*
+  Parameters: {"name"=>"moses", "email"=>"ocbcjsb@gmail.com", "password"=>"[FILTERED]", "password_confirmation"=>"[FILTERED]", "user"=>{"name"=>"moses", "email"=>"ocbcjsb@gmail.com"}}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ocbcjsb@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:96:in `check_blocked_status'
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ocbcjsb@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:14:in `authenticate'
+Completed 404 Not Found in 2ms (Views: 0.1ms | ActiveRecord: 0.2ms | Allocations: 1055)
+
+
+Started POST "/register" for 127.0.0.1 at 2023-05-26 00:32:18 +0300
+Processing by UsersController#create as */*
+  Parameters: {"name"=>"moses", "email"=>"ocbcjsb@kmm.com", "password"=>"[FILTERED]", "password_confirmation"=>"[FILTERED]", "user"=>{"name"=>"moses", "email"=>"ocbcjsb@kmm.com"}}
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/users_controller.rb:38:in `create'
+  [1m[36mUser Exists? (0.2ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ocbcjsb@kmm.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:38:in `create'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  ↳ app/controllers/users_controller.rb:38:in `create'
+Completed 422 Unprocessable Entity in 4ms (Views: 0.2ms | ActiveRecord: 0.3ms | Allocations: 2293)
+
+
+Started POST "/register" for 127.0.0.1 at 2023-05-26 00:32:20 +0300
+Processing by UsersController#create as */*
+  Parameters: {"name"=>"moses", "email"=>"ocbcjsb@kmm.com", "password"=>"[FILTERED]", "password_confirmation"=>"[FILTERED]", "user"=>{"name"=>"moses", "email"=>"ocbcjsb@kmm.com"}}
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/users_controller.rb:38:in `create'
+  [1m[36mUser Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ocbcjsb@kmm.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:38:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  ↳ app/controllers/users_controller.rb:38:in `create'
+Completed 422 Unprocessable Entity in 5ms (Views: 0.2ms | ActiveRecord: 0.3ms | Allocations: 2272)
+
+
+Started POST "/register" for 127.0.0.1 at 2023-05-26 00:36:10 +0300
+Processing by UsersController#create as */*
+  Parameters: {"name"=>"moses", "email"=>"ocbcjsb@kmm.com", "password"=>"[FILTERED]", "password_confirmation"=>"[FILTERED]", "user"=>{"name"=>"moses", "email"=>"ocbcjsb@kmm.com"}}
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/users_controller.rb:39:in `create'
+  [1m[36mUser Exists? (0.4ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ocbcjsb@kmm.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:39:in `create'
+  [1m[36mUser Create (0.3ms)[0m  [1m[32mINSERT INTO "users" ("name", "email", "password_digest", "blocked", "failed_login_attempts", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["name", "moses"], ["email", "ocbcjsb@kmm.com"], ["password_digest", "[FILTERED]"], ["blocked", 0], ["failed_login_attempts", 0], ["created_at", "2023-05-25 21:36:10.905497"], ["updated_at", "2023-05-25 21:36:10.905497"]]
+  ↳ app/controllers/users_controller.rb:39:in `create'
+  [1m[36mTRANSACTION (293.1ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/users_controller.rb:39:in `create'
+Completed 201 Created in 558ms (Views: 0.8ms | ActiveRecord: 294.8ms | Allocations: 4884)
+
+
+Started POST "/login" for 127.0.0.1 at 2023-05-26 00:36:41 +0300
+Processing by UsersController#authenticate as */*
+  Parameters: {"name"=>"moses", "email"=>"ocbcjsb@kmm.com", "password"=>"[FILTERED]", "password_confirmation"=>"[FILTERED]", "user"=>{"name"=>"moses", "email"=>"ocbcjsb@kmm.com"}}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ocbcjsb@kmm.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:97:in `check_blocked_status'
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ocbcjsb@kmm.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:14:in `authenticate'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/users_controller.rb:106:in `increment_failed_attempts'
+  [1m[36mUser Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? AND "users"."id" != ? LIMIT ?[0m  [["email", "ocbcjsb@kmm.com"], ["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:106:in `increment_failed_attempts'
+  [1m[36mUser Update (0.3ms)[0m  [1m[33mUPDATE "users" SET "failed_login_attempts" = ?, "updated_at" = ? WHERE "users"."id" = ?[0m  [["failed_login_attempts", 1], ["updated_at", "2023-05-25 21:36:42.207759"], ["id", 1]]
+  ↳ app/controllers/users_controller.rb:106:in `increment_failed_attempts'
+  [1m[36mTRANSACTION (254.1ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/users_controller.rb:106:in `increment_failed_attempts'
+Completed 422 Unprocessable Entity in 516ms (Views: 0.4ms | ActiveRecord: 254.8ms | Allocations: 3456)
+
+
+Started POST "/login" for 127.0.0.1 at 2023-05-26 00:36:47 +0300
+Processing by UsersController#authenticate as */*
+  Parameters: {"name"=>"moses", "email"=>"ocbcjsb@kmm.com", "password"=>"[FILTERED]", "password_confirmation"=>"[FILTERED]", "user"=>{"name"=>"moses", "email"=>"ocbcjsb@kmm.com"}}
+  [1m[36mUser Load (0.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ocbcjsb@kmm.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:97:in `check_blocked_status'
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ocbcjsb@kmm.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:14:in `authenticate'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/users_controller.rb:106:in `increment_failed_attempts'
+  [1m[36mUser Exists? (0.2ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? AND "users"."id" != ? LIMIT ?[0m  [["email", "ocbcjsb@kmm.com"], ["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:106:in `increment_failed_attempts'
+  [1m[36mUser Update (0.3ms)[0m  [1m[33mUPDATE "users" SET "failed_login_attempts" = ?, "updated_at" = ? WHERE "users"."id" = ?[0m  [["failed_login_attempts", 2], ["updated_at", "2023-05-25 21:36:47.845001"], ["id", 1]]
+  ↳ app/controllers/users_controller.rb:106:in `increment_failed_attempts'
+  [1m[36mTRANSACTION (620.9ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/users_controller.rb:106:in `increment_failed_attempts'
+Completed 422 Unprocessable Entity in 889ms (Views: 0.3ms | ActiveRecord: 621.6ms | Allocations: 3263)
+
+
+Started POST "/register" for 127.0.0.1 at 2023-05-26 00:36:59 +0300
+Processing by UsersController#create as */*
+  Parameters: {"name"=>"moses", "email"=>"ocbcjsb@kmm.com", "password"=>"[FILTERED]", "password_confirmation"=>"[FILTERED]", "user"=>{"name"=>"moses", "email"=>"ocbcjsb@kmm.com"}}
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/users_controller.rb:39:in `create'
+  [1m[36mUser Exists? (0.2ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ocbcjsb@kmm.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:39:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  ↳ app/controllers/users_controller.rb:39:in `create'
+Completed 422 Unprocessable Entity in 261ms (Views: 0.2ms | ActiveRecord: 0.4ms | Allocations: 2417)
+
+
+Started POST "/login" for 127.0.0.1 at 2023-05-26 00:37:07 +0300
+Processing by UsersController#authenticate as */*
+  Parameters: {"name"=>"moses", "email"=>"ocbcjsb@kmm.com", "password"=>"[FILTERED]", "password_confirmation"=>"[FILTERED]", "user"=>{"name"=>"moses", "email"=>"ocbcjsb@kmm.com"}}
+  [1m[36mUser Load (0.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ocbcjsb@kmm.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:97:in `check_blocked_status'
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "ocbcjsb@kmm.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:14:in `authenticate'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/users_controller.rb:106:in `increment_failed_attempts'
+  [1m[36mUser Exists? (0.2ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? AND "users"."id" != ? LIMIT ?[0m  [["email", "ocbcjsb@kmm.com"], ["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:106:in `increment_failed_attempts'
+  [1m[36mUser Update (0.3ms)[0m  [1m[33mUPDATE "users" SET "failed_login_attempts" = ?, "updated_at" = ? WHERE "users"."id" = ?[0m  [["failed_login_attempts", 3], ["updated_at", "2023-05-25 21:37:07.658534"], ["id", 1]]
+  ↳ app/controllers/users_controller.rb:106:in `increment_failed_attempts'
+  [1m[36mTRANSACTION (290.8ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/users_controller.rb:106:in `increment_failed_attempts'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/users_controller.rb:25:in `authenticate'
+  [1m[36mUser Exists? (0.5ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? AND "users"."id" != ? LIMIT ?[0m  [["email", "ocbcjsb@kmm.com"], ["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:25:in `authenticate'
+  [1m[36mUser Update (0.5ms)[0m  [1m[33mUPDATE "users" SET "blocked" = ?, "updated_at" = ? WHERE "users"."id" = ?[0m  [["blocked", 1], ["updated_at", "2023-05-25 21:37:07.959717"], ["id", 1]]
+  ↳ app/controllers/users_controller.rb:25:in `authenticate'
+  [1m[36mTRANSACTION (267.4ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/users_controller.rb:25:in `authenticate'
+Completed 401 Unauthorized in 833ms (Views: 0.6ms | ActiveRecord: 559.9ms | Allocations: 5622)
+
+
