@@ -19,10 +19,10 @@ class UsersController < ApplicationController
       reset_failed_attempts(user)
       token = encode({ user_id: user.id, email: user.email, status: user.blocked? })
 
-      role_message = case user.role
-        when "admin"
+      role_message = case user.role.to_sym
+        when :admin_clerk
           "Welcome, Admin!"
-        when "clerk"
+        when :clerk
           "Welcome, Clerk!"
         else
           "Welcome, User!"
@@ -58,14 +58,16 @@ class UsersController < ApplicationController
   end
 
   def show
-    user = User.find_by(id: current_user_id)
-    render json: user
+    user = User.includes(:voter).find_by(id: current_user_id)
+    render json: user.as_json(include: :voter)
   end
+  
 
   def destroy
     token = nil
-    head :no_content
+    render json: { message: "User successfully logged out" }, status: :ok
   end
+  
 
   private
 
@@ -103,7 +105,7 @@ class UsersController < ApplicationController
   end
 
   def authenticate_request
-    render json: { error: "Unauthorized" }, status: :unauthorized unless current_user_id
+    render json: { error: "Unauthorized" }, status: :unauthorized unless current_user_id && authorized_user?
   end
 
   def check_blocked_status

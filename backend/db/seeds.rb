@@ -98,15 +98,15 @@ parties = [
 ]
 parties.each { |party| Party.create(party) }
 
-# Create users
-users = [
-  { name: "Admin", email: "admin@example.com", password: "password" },
-  # Add more users as needed
-]
-users.each { |user| User.create(user) }
-
 # Create voters using Faker
 2.times do
+  user = User.create!(
+    name: Faker::Name.name,
+    email: Faker::Internet.email,
+    password: Faker::Internet.password(min_length: 8),
+    role: User.roles.keys.sample # Assign a random role from the enum
+  )
+  
   voter = Voter.new(
     full_names: Faker::Name.name,
     sex: Faker::Gender.binary_type,
@@ -114,8 +114,10 @@ users.each { |user| User.create(user) }
     county: County.all.sample.name,
     subcounty: Subcounty.all.sample.name,
     national: ["Kenya"].sample,
-    ward: Ward.all.sample
+    ward: Ward.all.sample,
+    user: user # Associate the voter with the created user
   )
+  
   voter.save!
 end
 

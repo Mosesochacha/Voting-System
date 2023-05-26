@@ -93,15 +93,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_25_175304) do
   create_table "voters", primary_key: "id_number", force: :cascade do |t|
     t.string "full_names"
     t.string "sex"
-    t.datetime "date_of_birth"
+    t.date "date_of_birth"
     t.string "county"
     t.string "subcounty"
     t.integer "age"
     t.string "national"
     t.string "email"
     t.integer "ward_id", null: false
+    t.integer "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_voters_on_user_id"
     t.index ["ward_id"], name: "index_voters_on_ward_id"
   end
 
@@ -118,6 +120,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_25_175304) do
   add_foreign_key "candidates", "wards"
   add_foreign_key "counties", "nationals"
   add_foreign_key "subcounties", "counties"
+  add_foreign_key "voters", "users"
   add_foreign_key "voters", "wards"
   add_foreign_key "wards", "subcounties"
 end
