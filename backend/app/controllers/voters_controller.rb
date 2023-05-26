@@ -15,19 +15,10 @@ class VotersController < ApplicationController
     @voter.subcounty = ward.subcounty.name
     @voter.national = ward.subcounty.county.national.name
 
-    begin
-      @voter.save!
+    if @voter.save
       render json: @voter, status: :created
-    rescue ActiveRecord::RecordNotUnique => e
-      if e.message.include?("id_number")
-        render json: { error: "ID number already registered" }, status: :unprocessable_entity
-      elsif e.message.include?("email")
-        render json: { error: "Email already exists" }, status: :unprocessable_entity
-      else
-        render json: { error: "Record not unique" }, status: :unprocessable_entity
-      end
-    rescue ActiveRecord::RecordInvalid => e
-      render json: { error: e.record.errors.full_messages }, status: :unprocessable_entity
+    else
+      render json: { error: @voter.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
@@ -39,9 +30,11 @@ class VotersController < ApplicationController
 
   # GET /voters/1
   def show
-    render json: @voter.as_json(include: { ward: { include: { subcounty: { include: :county } } } })
-  rescue ActiveRecord::RecordNotFound => e
-    render json: { error: e.message }, status: :not_found
+    if @voter.nil?
+      render json: { error: "Voter not found" }, status: :not_found
+    else
+      render json: @voter.as_json(include: { ward: { include: { subcounty: { include: :county } } } })
+    end
   end
 
   # PATCH/PUT /voters/1
