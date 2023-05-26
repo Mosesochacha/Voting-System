@@ -26,12 +26,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_25_175304) do
     t.text "manifesto"
     t.integer "party_id", null: false
     t.integer "position_id", null: false
-    t.integer "wards_id"
+    t.integer "ward_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["party_id"], name: "index_candidates_on_party_id"
     t.index ["position_id"], name: "index_candidates_on_position_id"
-    t.index ["wards_id"], name: "index_candidates_on_wards_id"
+    t.index ["ward_id"], name: "index_candidates_on_ward_id"
   end
 
   create_table "counties", force: :cascade do |t|
@@ -93,10 +93,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_25_175304) do
   create_table "voters", primary_key: "id_number", force: :cascade do |t|
     t.string "full_names"
     t.string "sex"
-    t.datetime "Date_of_birth"
+    t.datetime "date_of_birth"
     t.string "county"
     t.string "subcounty"
-    t.string "location"
+    t.integer "age"
+    t.string "national"
+    t.string "email"
     t.integer "ward_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -113,6 +115,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_25_175304) do
 
   add_foreign_key "candidates", "parties"
   add_foreign_key "candidates", "positions"
+  add_foreign_key "candidates", "wards"
   add_foreign_key "counties", "nationals"
   add_foreign_key "subcounties", "counties"
   add_foreign_key "voters", "wards"

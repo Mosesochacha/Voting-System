@@ -4,10 +4,12 @@ class CreateVoters < ActiveRecord::Migration[7.0]
       t.integer :id_number , primary_key: true
       t.string :full_names
       t.string :sex
-      t.datetime :Date_of_birth
+      t.datetime :date_of_birth
       t.string :county
       t.string  :subcounty
-      t.string   :location
+      t.integer :age
+      t.string   :national
+      t.string :email
       t.references :ward, null: false, foreign_key: true
       t.timestamps
     end

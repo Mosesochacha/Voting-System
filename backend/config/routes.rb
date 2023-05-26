@@ -1,7 +1,9 @@
 Rails.application.routes.draw do
-  resources :voters
+  # resources :voters
+  get "/voters", to: 'voters#index'
+  post "/voters/:ward_id", to: 'voters#register_voter'
   resources :candidates
-  resources :parties
+  resources :partieex
   resources :positions
   resources :users
   resources :wards

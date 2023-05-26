@@ -63,16 +63,16 @@ counties.each do |county|
     { name: "#{county_record.name} Subcounty 1", county: county_record },
     { name: "#{county_record.name} Subcounty 2", county: county_record },
     { name: "#{county_record.name} Subcounty 3", county: county_record },
-    { name: "#{county_record.name} Subcounty 4", county: county_record },
-    { name: "#{county_record.name} Subcounty 5", county: county_record },
-    { name: "#{county_record.name} Subcounty 6", county: county_record }
+    # { name: "#{county_record.name} Subcounty 4", county: county_record },
+    # { name: "#{county_record.name} Subcounty 5", county: county_record },
+    # { name: "#{county_record.name} Subcounty 6", county: county_record }
   ]
   
   subcounties.each do |subcounty|
     subcounty_record = Subcounty.create(name: subcounty[:name], county: subcounty[:county])
     
     # Create Wards
-    7.times do |i|
+    2.times do |i|
       ward_name = "#{subcounty_record.name} Ward #{i + 1}"
       Ward.create(name: ward_name, subcounty: subcounty_record)
     end
@@ -106,21 +106,21 @@ users = [
 users.each { |user| User.create(user) }
 
 # Create voters using Faker
-20.times do
+2.times do
   voter = Voter.new(
     full_names: Faker::Name.name,
     sex: Faker::Gender.binary_type,
     date_of_birth: Faker::Date.birthday(min_age: 18, max_age: 65),
     county: County.all.sample.name,
     subcounty: Subcounty.all.sample.name,
-    location: Faker::Address.street_address,
+    national: ["Kenya"].sample,
     ward: Ward.all.sample
   )
   voter.save!
 end
 
 # Create candidates using Faker
-30.times do
+3.times do
   candidate = Candidate.new(
     name: Faker::Name.name,
     education: Faker::Educator.degree,
