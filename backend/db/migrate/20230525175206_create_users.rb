@@ -4,6 +4,7 @@ class CreateUsers < ActiveRecord::Migration[7.0]
       t.string :name
       t.string :email
       t.string :password_digest
+      t.integer :role, default: 0 
       t.boolean :blocked, default: false
       t.integer :failed_login_attempts, default: 0
       t.timestamps

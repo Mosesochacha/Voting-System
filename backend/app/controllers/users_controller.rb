@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :authenticate_request, except: [:authenticate, :create]
+  before_action :authenticate_request, except: [:authenticate, :destroy, :create]
   before_action :check_blocked_status, only: [:authenticate]
 
   rescue_from ActiveRecord::RecordInvalid, with: :record_invalid
@@ -18,7 +18,17 @@ class UsersController < ApplicationController
     elsif user.authenticate(params[:password])
       reset_failed_attempts(user)
       token = encode({ user_id: user.id, email: user.email, status: user.blocked? })
-      render json: { token: token }, status: :ok
+
+      role_message = case user.role
+        when "admin"
+          "Welcome, Admin!"
+        when "clerk"
+          "Welcome, Clerk!"
+        else
+          "Welcome, User!"
+        end
+
+      render json: { token: token, message: role_message }, status: :ok
     else
       increment_failed_attempts(user)
       if user.failed_login_attempts >= 3
@@ -53,7 +63,7 @@ class UsersController < ApplicationController
   end
 
   def destroy
-    session[:user_id] = nil
+    token = nil
     head :no_content
   end
 

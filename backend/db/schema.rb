@@ -13,16 +13,34 @@
 ActiveRecord::Schema[7.0].define(version: 2023_05_25_175304) do
   create_table "candidates", force: :cascade do |t|
     t.string "name"
+    t.string "education"
+    t.text "integrity"
+    t.string "image"
+    t.boolean "kenyan_citizen", default: true, null: false
+    t.integer "age"
+    t.boolean "meets_educational_requirements", default: true, null: false
+    t.boolean "meets_integrity_requirements", default: true, null: false
+    t.boolean "nominated_by_party", default: false, null: false
+    t.boolean "nominated_by_signatures", default: false, null: false
+    t.boolean "meets_support_requirements", default: true, null: false
+    t.text "manifesto"
     t.integer "party_id", null: false
     t.integer "position_id", null: false
+    t.integer "wards_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["party_id"], name: "index_candidates_on_party_id"
     t.index ["position_id"], name: "index_candidates_on_position_id"
+    t.index ["wards_id"], name: "index_candidates_on_wards_id"
   end
 
   create_table "counties", force: :cascade do |t|
     t.string "name"
+    t.string "region"
+    t.float "area"
+    t.float "population"
+    t.string "capital"
+    t.string "code"
     t.integer "national_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -31,12 +49,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_25_175304) do
 
   create_table "nationals", force: :cascade do |t|
     t.string "name"
+    t.string "image"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "parties", force: :cascade do |t|
     t.string "name"
+    t.string "image"
+    t.integer "party_code"
+    t.string "abbreviation"
+    t.string "symbol_name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -59,6 +82,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_25_175304) do
     t.string "name"
     t.string "email"
     t.string "password_digest"
+    t.integer "role", default: 0
     t.boolean "blocked", default: false
     t.integer "failed_login_attempts", default: 0
     t.datetime "created_at", null: false
@@ -66,9 +90,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_25_175304) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
-  create_table "voters", force: :cascade do |t|
-    t.string "id_number"
-    t.string "name"
+  create_table "voters", primary_key: "id_number", force: :cascade do |t|
+    t.string "full_names"
+    t.string "sex"
+    t.datetime "Date_of_birth"
+    t.string "county"
+    t.string "subcounty"
+    t.string "location"
     t.integer "ward_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
