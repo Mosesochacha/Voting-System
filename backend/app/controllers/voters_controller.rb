@@ -39,7 +39,9 @@ class VotersController < ApplicationController
 
   # GET /voters/1
   def show
-    render json: @voter
+    render json: @voter.as_json(include: { ward: { include: { subcounty: { include: :county } } } })
+  rescue ActiveRecord::RecordNotFound => e
+    render json: { error: e.message }, status: :not_found
   end
 
   # PATCH/PUT /voters/1
@@ -60,7 +62,7 @@ class VotersController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_voter
-    @voter = Voter.find_by(id: params[:id])
+    @voter = Voter.find_by(id_number: params[:id])
     raise ActiveRecord::RecordNotFound, "Voter not found" if @voter.nil?
   rescue ActiveRecord::RecordNotFound => e
     render json: { error: e.message }, status: :not_found
