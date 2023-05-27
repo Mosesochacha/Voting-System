@@ -12,7 +12,7 @@ function RegistrationComponent() {
     password_confirmation: "",
   });
 
-  const [error, setError] = useState("");
+  const [errors, setErrors] = useState([]);
   const [message, setMessage] = useState("");
   const [isRegistering, setIsRegistering] = useState(false);
 
@@ -29,30 +29,29 @@ function RegistrationComponent() {
     setIsRegistering(true);
 
     try {
-      const response = await axios.post(
-        "https://cashflow-1rf2.onrender.com/register",
-        {
-          username: registerFormData.name,
-          email: registerFormData.email,
-          password: registerFormData.password,
-          password_confirmation: registerFormData.password_confirmation,
-        }
-      );
+      const response = await axios.post("http://localhost:4000/register", {
+        name: registerFormData.name,
+        email: registerFormData.email,
+        password: registerFormData.password,
+        password_confirmation: registerFormData.password_confirmation,
+      });
 
-      const { data } = response;
+      const data = response.data; // Use response.data instead of just response
+      console.log(data);
 
       if (data.message) {
         setMessage(data.message);
-        setError("");
+        setErrors([]);
         history.push("/login");
         window.location.reload();
       } else if (data.errors) {
         setMessage("");
-        setError(data.errors);
+        setErrors(data.errors);
+        console.log(data.errors);
       }
     } catch (error) {
       setMessage("");
-      setError("An error occurred during registration.");
+      setErrors(error.response.data.errors);
     }
 
     setIsRegistering(false);
@@ -93,7 +92,11 @@ function RegistrationComponent() {
         <button type="submit" disabled={isRegistering}>
           {isRegistering ? "Registering..." : "Register"}
         </button>
-        {error && <p>{error}</p>}
+        <div>
+          {errors.map((error, index) => (
+            <p key={index}>{error}</p>
+          ))}
+        </div>
         {message && <p>{message}</p>}
       </form>
     </div>

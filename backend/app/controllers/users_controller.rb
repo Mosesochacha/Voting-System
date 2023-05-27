@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :authenticate_request, except: [:authenticate, :destroy, :create]
+  before_action :authenticate_request, except: [:authenticate, :create, :check_login]
   before_action :check_blocked_status, only: [:authenticate]
 
   rescue_from ActiveRecord::RecordInvalid, with: :record_invalid
@@ -9,7 +9,14 @@ class UsersController < ApplicationController
     users = User.all
     render json: users
   end
-
+  
+  def check_login
+    if current_user_id
+      render json: { logged_in: true }
+    else
+      render json: { logged_in: false }
+    end
+  end
   def authenticate
     user = User.find_by(email: params[:email])
 
@@ -49,13 +56,14 @@ class UsersController < ApplicationController
       user.password_confirmation = params[:password_confirmation]
       user.save!
       token = encode({ user_id: user.id, email: user.email })
-      render json: { token: token, user: user }, status: :created
+      render json: { token: token, user: user, message: 'User registered successfully' }, status: :created
     rescue ActiveRecord::RecordInvalid => e
       render json: { errors: e.record.errors.full_messages }, status: :unprocessable_entity
     rescue ActiveRecord::RecordNotUnique => e
       render json: { errors: [e.message] }, status: :unprocessable_entity
     end
   end
+  
 
   def show
     user = User.includes(:voter).find_by(id: current_user_id)

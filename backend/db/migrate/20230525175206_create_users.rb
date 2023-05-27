@@ -9,7 +9,6 @@ class CreateUsers < ActiveRecord::Migration[7.0]
       t.integer :failed_login_attempts, default: 0
       t.timestamps
     end
-
     add_index :users, :email, unique: true
   end
 end

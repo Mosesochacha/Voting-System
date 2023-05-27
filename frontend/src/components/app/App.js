@@ -1,16 +1,37 @@
-import React, { useState } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Redirect,
+} from "react-router-dom";
 import axios from "axios";
 import Navbar from "../user/Navbar";
+import CandidatesList from "../user/GetCandidate";
 import RegistrationComponent from "../authatautication/Registration";
 import LoginComponent from "../authatautication/Login";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
 
+  useEffect(() => {
+    checkLoginStatus();
+  }, []);
+
+  const checkLoginStatus = async () => {
+    try {
+      const response = await axios.get("http://localhost:4000/check_login", {
+        withCredentials: true, // Send cookies with the request
+      });
+      setLoggedIn(response.data.logged_in);
+    } catch (error) {
+      console.log("An error occurred during login status check:", error);
+    }
+  };
+
   const handleLogout = () => {
     axios
-      .delete("http://localhost:4000/logout")
+      .delete("http://localhost:4000/logout", { withCredentials: true }) // Send cookies with the request
       .then(() => {
         setLoggedIn(false);
       })
@@ -19,14 +40,14 @@ function App() {
       });
   };
 
-  axios.interceptors.request.use(function (config) {
-    if (loggedIn) {
-      config.headers.Authorization = `Bearer ${localStorage.getItem(
-        "token"
-      )}`;
-    }
-    return config;
-  });
+  const PrivateRoute = ({ component: Component, ...rest }) => (
+    <Route
+      {...rest}
+      render={(props) =>
+        loggedIn ? <Component {...props} /> : <Redirect to="/login" />
+      }
+    />
+  );
 
   return (
     <Router>
@@ -34,7 +55,7 @@ function App() {
       <Switch>
         <Route exact path="/register" component={RegistrationComponent} />
         <Route exact path="/login" component={LoginComponent} />
-        {/* Add more routes for different roles */}
+        <PrivateRoute exact path="/user_dashboard" component={CandidatesList} />
       </Switch>
     </Router>
   );

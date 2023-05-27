@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import axios from 'axios';
+import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
+import axios from "axios";
 
 function LoginComponent() {
   const history = useHistory();
 
   const [loginFormData, setLoginFormData] = useState({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
   });
 
-  const [error, setError] = useState('');
-  const [message, setMessage] = useState('');
+  const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   const handleLoginChange = (e) => {
@@ -23,36 +23,35 @@ function LoginComponent() {
 
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
-
     setIsLoggingIn(true);
 
     try {
-      const response = await axios.post('https://localhost:4000/login', {
-        email: loginFormData.email,
-        password: loginFormData.password,
-      });
+      const response = await axios.post(
+        "http://localhost:4000/login",
+        {
+          email: loginFormData.email,
+          password: loginFormData.password,
+        },
+        {
+          withCredentials: true, // Send cookies with the request
+        }
+      );
 
       const { data } = response;
+      console.log(data.message); // Log the response to the console
 
-      if (data.message === 'admin') {
-        history.push('/dashboard');
-        setTimeout(() => {
-          window.location.reload();
-        }, 50);
+      if (data.message === "Welcome, Admin!") {
         setMessage(data.message);
-      } else if (data.message === 'user') {
-        history.push('/welcome');
-        setTimeout(() => {
-          window.location.reload();
-        }, 50);
+        history.push("/admin_dashboard");
+      } else if (data.message === "Welcome, Clerk!") {
         setMessage(data.message);
+        history.push("/clerk_dashboard");
       } else {
-        setMessage('');
-        setError(data.errors);
-        console.log(data.errors);
+        setMessage(data.message);
+        history.push("/user_dashboard");
       }
     } catch (error) {
-      setError('An error occurred during login.');
+      setError(error.response.data.errors);
     }
 
     setIsLoggingIn(false);
@@ -77,7 +76,7 @@ function LoginComponent() {
           onChange={handleLoginChange}
         />
         <button type="submit" disabled={isLoggingIn}>
-          {isLoggingIn ? 'Logging in...' : 'Login'}
+          {isLoggingIn ? "Logging in..." : "Login"}
         </button>
         {error && <p>{error}</p>}
         {message && <p>{message}</p>}
