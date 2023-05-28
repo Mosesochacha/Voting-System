@@ -38,23 +38,31 @@ function LoginComponent() {
       );
 
       const { data } = response;
-      console.log(data.message); // Log the response to the console
+      console.log(data); // Log the response to the console
 
-      if (data.message === "Welcome, Admin!") {
+      if (data.token) {
+        axios.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${data.token}`;
+      }
+
+      if (data.message === "Welcome, User!") {
         setMessage(data.message);
-        history.push("/admin_dashboard");
+        history.push("/user_dashboard");
       } else if (data.message === "Welcome, Clerk!") {
         setMessage(data.message);
         history.push("/clerk_dashboard");
-      } else {
+      } else if (data.message === "Welcome, Admin!") {
         setMessage(data.message);
-        history.push("/user_dashboard");
+        history.push("/admin_dashboard");
+      } else {
+        setMessage("Unknown role");
       }
     } catch (error) {
       setError(error.response.data.errors);
+    } finally {
+      setIsLoggingIn(false);
     }
-
-    setIsLoggingIn(false);
   };
 
   return (

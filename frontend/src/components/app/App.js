@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 import axios from "axios";
 import Navbar from "../user/Navbar";
-import CandidatesList from "../user/GetCandidate";
+import CandidatesList from "../user/Getcandidate";
 import RegistrationComponent from "../authatautication/Registration";
 import LoginComponent from "../authatautication/Login";
 
@@ -24,6 +24,11 @@ function App() {
         withCredentials: true, // Send cookies with the request
       });
       setLoggedIn(response.data.logged_in);
+      if (response.data.logged_in && response.data.token) {
+        axios.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${response.data.token}`;
+      }
     } catch (error) {
       console.log("An error occurred during login status check:", error);
     }
@@ -34,20 +39,23 @@ function App() {
       .delete("http://localhost:4000/logout", { withCredentials: true }) // Send cookies with the request
       .then(() => {
         setLoggedIn(false);
+        delete axios.defaults.headers.common["Authorization"];
       })
       .catch((error) => {
         console.log("An error occurred during logout:", error);
       });
   };
 
-  const PrivateRoute = ({ component: Component, ...rest }) => (
-    <Route
-      {...rest}
-      render={(props) =>
-        loggedIn ? <Component {...props} /> : <Redirect to="/login" />
-      }
-    />
-  );
+  const PrivateRoute = ({ component: Component, ...rest }) => {
+    return (
+      <Route
+        {...rest}
+        render={(props) =>
+          loggedIn ? <Component {...props} /> : <Redirect to="/login" />
+        }
+      />
+    );
+  };
 
   return (
     <Router>

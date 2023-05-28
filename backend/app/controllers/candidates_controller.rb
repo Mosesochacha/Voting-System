@@ -1,5 +1,4 @@
 class CandidatesController < ApplicationController
-  get
 
   def index
     position_name = params[:level].capitalize

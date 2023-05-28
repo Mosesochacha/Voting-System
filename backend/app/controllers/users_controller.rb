@@ -9,14 +9,12 @@ class UsersController < ApplicationController
     users = User.all
     render json: users
   end
-  
+
   def check_login
-    if current_user_id
-      render json: { logged_in: true }
-    else
-      render json: { logged_in: false }
-    end
+    token = cookies.signed[:token]
+    render json: { logged_in: true, token: token }
   end
+
   def authenticate
     user = User.find_by(email: params[:email])
 
@@ -24,8 +22,8 @@ class UsersController < ApplicationController
       user_not_found
     elsif user.authenticate(params[:password])
       reset_failed_attempts(user)
-      token = encode({ user_id: user.id, email: user.email, status: user.blocked? })
 
+      token = encode({ user_id: user.id, email: user.email, status: user.blocked? })
       role_message = case user.role.to_sym
         when :admin_clerk
           "Welcome, Admin!"
@@ -34,6 +32,8 @@ class UsersController < ApplicationController
         else
           "Welcome, User!"
         end
+
+      cookies.signed[:token] = { value: token, httponly: true }
 
       render json: { token: token, message: role_message }, status: :ok
     else
@@ -56,26 +56,23 @@ class UsersController < ApplicationController
       user.password_confirmation = params[:password_confirmation]
       user.save!
       token = encode({ user_id: user.id, email: user.email })
-      render json: { token: token, user: user, message: 'User registered successfully' }, status: :created
+      render json: { token: token, user: user, message: "User registered successfully" }, status: :created
     rescue ActiveRecord::RecordInvalid => e
       render json: { errors: e.record.errors.full_messages }, status: :unprocessable_entity
     rescue ActiveRecord::RecordNotUnique => e
       render json: { errors: [e.message] }, status: :unprocessable_entity
     end
   end
-  
 
   def show
     user = User.includes(:voter).find_by(id: current_user_id)
     render json: user.as_json(include: :voter)
   end
-  
 
   def destroy
     token = nil
     render json: { message: "User successfully logged out" }, status: :ok
   end
-  
 
   private
 

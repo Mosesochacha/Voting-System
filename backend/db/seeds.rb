@@ -84,9 +84,9 @@ positions = [
   { name: "President" },
   { name: "Governor" },
   { name: "Senator" },
-  { name: "Women Representative" },
-  { name: "Member of Parliament" },
-  { name: "Member of County Assembly" },
+  { name: "Women_Representative" },
+  { name: "Member_of_Parliament" },
+  { name: "Member_of_Count_ Assembly" },
 ]
 positions.each { |position| Position.create(position) }
 
