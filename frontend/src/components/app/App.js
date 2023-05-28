@@ -30,7 +30,7 @@ function App() {
   const checkLoginStatus = async () => {
     try {
       const response = await axios.get("http://localhost:4000/check_login", {
-        withCredentials: true, // Send cookies with the request
+        withCredentials: true,
       });
       setLoggedIn(response.data.logged_in);
       if (response.data.logged_in && response.data.token) {
@@ -49,7 +49,7 @@ function App() {
       .then(() => {
         setLoggedIn(false);
         delete axios.defaults.headers.common["Authorization"];
-        history.push("/");
+        history.push("/login");
       })
       .catch((error) => {
         console.log("An error occurred during logout:", error);
@@ -101,6 +101,8 @@ function App() {
           path="/create/mca"
           component={MemberOfCountyAssemblyComponent}
         />
+        <Redirect exact from="/" to="/user_dashboard" />
+        <Route path="*" component={() => <div>404 Not Found</div>} />
       </Switch>
     </Router>
   );

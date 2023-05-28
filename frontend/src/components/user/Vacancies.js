@@ -28,6 +28,8 @@ function Vacancies() {
       return "/womenrep";
     } else if (positionName === "Member_of_County_Assembly") {
       return "/create/mca";
+    } else {
+      return "/"; // Default route if position name doesn't match
     }
   };
 

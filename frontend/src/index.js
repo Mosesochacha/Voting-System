@@ -3,6 +3,8 @@ import { createRoot } from "react-dom/client";
 import { createBrowserHistory } from "history";
 import "./index.css";
 import App from "./components/app/App";
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 const history = createBrowserHistory();
 
