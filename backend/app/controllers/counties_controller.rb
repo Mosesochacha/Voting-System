@@ -1,10 +1,9 @@
 class CountiesController < ApplicationController
-  before_action :set_county, only: %i[ show update destroy ]
+  before_action :set_county, only: %i[show update destroy]
 
   # GET /counties
   def index
     @counties = County.all
-
     render json: @counties
   end
 
@@ -17,35 +16,50 @@ class CountiesController < ApplicationController
   def create
     @county = County.new(county_params)
 
-    if @county.save
-      render json: @county, status: :created, location: @county
-    else
-      render json: @county.errors, status: :unprocessable_entity
+    begin
+      if @county.save
+        render json: @county, status: :created, location: @county
+      else
+        render json: @county.errors, status: :unprocessable_entity
+      end
+    rescue StandardError => e
+      render json: { error: e.message }, status: :unprocessable_entity
     end
   end
 
   # PATCH/PUT /counties/1
   def update
-    if @county.update(county_params)
-      render json: @county
-    else
-      render json: @county.errors, status: :unprocessable_entity
+    begin
+      if @county.update(county_params)
+        render json: @county
+      else
+        render json: @county.errors, status: :unprocessable_entity
+      end
+    rescue StandardError => e
+      render json: { error: e.message }, status: :unprocessable_entity
     end
   end
 
   # DELETE /counties/1
   def destroy
-    @county.destroy
+    begin
+      @county.destroy
+    rescue StandardError => e
+      render json: { error: e.message }, status: :unprocessable_entity
+    end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_county
-      @county = County.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def county_params
-      params.require(:county).permit(:name, :national_id)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_county
+    @county = County.find(params[:id])
+  rescue ActiveRecord::RecordNotFound => e
+    render json: { error: e.message }, status: :not_found
+  end
+
+  # Only allow a list of trusted parameters through.
+  def county_params
+    params.require(:county).permit(:name, :region, :area, :population, :capital, :code, :national_id)
+  end
 end
