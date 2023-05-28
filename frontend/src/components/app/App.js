@@ -4,15 +4,24 @@ import {
   Route,
   Switch,
   Redirect,
+  useHistory,
 } from "react-router-dom";
 import axios from "axios";
 import Navbar from "../user/Navbar";
+import Vacancies from "../user/Vacancies";
 import CandidatesList from "../user/Getcandidate";
+import PresidentComponent from "../user/President";
+import GovernorComponent from "../user/Gorver";
+import SenatorComponent from "../user/Senator";
+import WomenRepresentativeComponent from "../user/Womrep";
+import MemberOfParliamentComponent from "../user/Mp";
+import MemberOfCountyAssemblyComponent from "../user/Mcas";
 import RegistrationComponent from "../authatautication/Registration";
 import LoginComponent from "../authatautication/Login";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
+  const history = useHistory();
 
   useEffect(() => {
     checkLoginStatus();
@@ -36,10 +45,11 @@ function App() {
 
   const handleLogout = () => {
     axios
-      .delete("http://localhost:4000/logout", { withCredentials: true }) // Send cookies with the request
+      .delete("http://localhost:4000/logout", { withCredentials: true })
       .then(() => {
         setLoggedIn(false);
         delete axios.defaults.headers.common["Authorization"];
+        history.push("/");
       })
       .catch((error) => {
         console.log("An error occurred during logout:", error);
@@ -57,6 +67,10 @@ function App() {
     );
   };
 
+  const requireAuth = (Component) => {
+    return loggedIn ? <Component /> : <Redirect to="/login" />;
+  };
+
   return (
     <Router>
       <Navbar loggedIn={loggedIn} handleLogout={handleLogout} />
@@ -64,6 +78,29 @@ function App() {
         <Route exact path="/register" component={RegistrationComponent} />
         <Route exact path="/login" component={LoginComponent} />
         <PrivateRoute exact path="/user_dashboard" component={CandidatesList} />
+        <PrivateRoute
+          exact
+          path="/vacancies"
+          component={() => requireAuth(Vacancies)}
+        />
+        <PrivateRoute exact path="/president" component={PresidentComponent} />
+        <PrivateRoute exact path="/governor" component={GovernorComponent} />
+        <PrivateRoute exact path="/senator" component={SenatorComponent} />
+        <PrivateRoute
+          exact
+          path="/womenrep"
+          component={WomenRepresentativeComponent}
+        />
+        <PrivateRoute
+          exact
+          path="/member_of_parliament"
+          component={MemberOfParliamentComponent}
+        />
+        <PrivateRoute
+          exact
+          path="/create/mca"
+          component={MemberOfCountyAssemblyComponent}
+        />
       </Switch>
     </Router>
   );

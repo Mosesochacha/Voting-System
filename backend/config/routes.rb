@@ -7,7 +7,8 @@ Rails.application.routes.draw do
   # patch "/voters/:id", to: "voters#update"
   # delete "/voters/:id", to: "voters#destroy"
 
-   get '/candidates/:level', to: 'candidates#index'
+  get "/candidates/:level", to: "candidates#index"
+  get "vacancies", to: "candidates#vacancies"
 
   # get "/parties", to: "parties#index"
   # post "/parties", to: "parties#create"
@@ -25,7 +26,7 @@ Rails.application.routes.draw do
   post "/register", to: "users#create"
   post "/login", to: "users#authenticate"
   delete "/logout", to: "users#destroy"
-  get '/check_login', to: 'users#check_login'
+  get "/check_login", to: "users#check_login"
 
   # get "/wards", to: "wards#index"
   # post "/wards", to: "wards#create"

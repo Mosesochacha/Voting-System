@@ -41,20 +41,24 @@ function LoginComponent() {
       console.log(data); // Log the response to the console
 
       if (data.token) {
-        axios.defaults.headers.common[
-          "Authorization"
-        ] = `Bearer ${data.token}`;
+        axios.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
       }
 
       if (data.message === "Welcome, User!") {
         setMessage(data.message);
-        history.push("/user_dashboard");
+        setTimeout(() => {
+          history.push("/vacancies"); // Redirect to vacancies after a delay
+        }, 1000); // Delay of 1 second (1000 milliseconds)
       } else if (data.message === "Welcome, Clerk!") {
         setMessage(data.message);
-        history.push("/clerk_dashboard");
+        setTimeout(() => {
+          history.push("/clerk_dashboard"); // Redirect to clerk_dashboard after a delay
+        }, 1000); // Delay of 1 second (1000 milliseconds)
       } else if (data.message === "Welcome, Admin!") {
         setMessage(data.message);
-        history.push("/admin_dashboard");
+        setTimeout(() => {
+          history.push("/admin_dashboard"); // Redirect to admin_dashboard after a delay
+        }, 1000); // Delay of 1 second (1000 milliseconds)
       } else {
         setMessage("Unknown role");
       }
