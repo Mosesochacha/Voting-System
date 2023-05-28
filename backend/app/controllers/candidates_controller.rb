@@ -1,7 +1,6 @@
 class CandidatesController < ApplicationController
   def vacancies
     positions = Position.where(vacancies: true)
-
     serialized_positions = positions.map do |position|
       {
         id: position.id,
@@ -19,7 +18,6 @@ class CandidatesController < ApplicationController
   def index
     position_name = params[:level].capitalize
     position = Position.find_by(name: position_name)
-
     if position.nil?
       render json: { error: "No #{position_name} candidates are registered" }, status: :not_found
       return
@@ -94,7 +92,6 @@ class CandidatesController < ApplicationController
   def create
     position_name = params[:level].capitalize
     position = Position.find_by(name: position_name)
-
     if position.nil?
       render json: { error: "No #{position_name} is registered" }, status: :not_found
       return

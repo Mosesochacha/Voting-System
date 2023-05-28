@@ -24,9 +24,13 @@ function Vacancies() {
       return "/president";
     } else if (positionName === "Governor") {
       return "/governor";
+    } else if (positionName === "Senator") {
+      return "/senator";
     } else if (positionName === "Women_Representative") {
       return "/womenrep";
-    } else if (positionName === "Member_of_County_Assembly") {
+    } else if (positionName === "Member_of_Parliament") {
+      return "/member_of_parliament";
+    } else if (positionName === "Member_of_Count_Assembly") {
       return "/create/mca";
     } else {
       return "/"; // Default route if position name doesn't match
