@@ -23,7 +23,7 @@ export default function WomenRepresentativeComponent() {
 
     try {
       const response = await axios.post(
-        "http://localhost:4000/candidates/women-representative",
+        "http://localhost:4000/candidates/women_representative",
         {
           candidate: candidateData,
         }

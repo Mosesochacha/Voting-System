@@ -23,7 +23,7 @@ export default function MemberOfParliamentComponent() {
 
     try {
       const response = await axios.post(
-        "http://localhost:4000/candidates/member-of-parliament",
+        "http://localhost:4000/candidates/member_of_parliament",
         {
           candidate: candidateData,
         }

@@ -97,51 +97,43 @@ class CandidatesController < ApplicationController
       return
     end
 
-    candidate = Candidate.new(candidate_params.merge(position_id: position.id))
-
-    case params[:level]
-    when "President"
-      candidate.requirement1 = "Must be a Kenyan citizen"
-      candidate.requirement2 = "Minimum age of 35"
-      candidate.requirement3 = "Should not be bankrupt"
-      candidate.requirement4 = "Must hold a degree"
-      candidate.requirement5 = "No criminal record"
-    when "Governor"
-      candidate.requirement1 = "Must be a Kenyan citizen"
-      candidate.requirement2 = "Minimum age of 30"
-      candidate.requirement3 = "Should have prior leadership experience"
-      candidate.requirement4 = "Strong understanding of local issues"
-      candidate.requirement5 = "Effective communication skills"
-    when "Senator"
-      candidate.requirement1 = "Must be a Kenyan citizen"
-      candidate.requirement2 = "Minimum age of 30"
-      candidate.requirement3 = "Experience in public service or governance"
-      candidate.requirement4 = "In-depth knowledge of legislative processes"
-      candidate.requirement5 = "Strong advocate for constituents"
-    when "Women_Representative"
-      candidate.requirement1 = "Must be a Kenyan citizen"
-      candidate.requirement2 = "Minimum age of 25"
-      candidate.requirement3 = "Experience in women empowerment"
-      candidate.requirement4 = "Strong public speaking skills"
-      candidate.requirement5 = "Commitment to gender equality"
-    when "Member_of_Parliament"
-      candidate.requirement1 = "Must be a Kenyan citizen"
-      candidate.requirement2 = "Minimum age of 21"
-      candidate.requirement3 = "Active involvement in local community"
-      candidate.requirement4 = "Understanding of legislative processes"
-      candidate.requirement5 = "Ability to represent constituents effectively"
-    when "Member_of_County_Assembly"
-      candidate.requirement1 = "Must be a Kenyan citizen"
-      candidate.requirement2 = "Minimum age of 18"
-      candidate.requirement3 = "Knowledge of local issues"
-      candidate.requirement4 = "Commitment to public service"
-      candidate.requirement5 = "Strong interpersonal skills"
-    else
-      # Custom candidate type, add your own requirements here
+    # Find party by abbreviation
+    party = Party.find_by(abbreviation: params[:abbreviation])
+    if party.nil?
+      render json: { error: "Party not found" }, status: :unprocessable_entity
+      return
     end
 
+    # Find ward by name
+    ward = Ward.find_by(name: params[:ward_name])
+    if ward.nil?
+      render json: { error: "Ward not found" }, status: :unprocessable_entity
+      return
+    end
+
+    candidate = Candidate.new(candidate_params.merge(position_id: position.id, party_id: party.id, ward_id: ward.id))
+
     if candidate.save
-      render json: candidate, status: :created
+      render json: {
+        id: candidate.id,
+        name: candidate.name,
+        education: candidate.education,
+        integrity: candidate.integrity,
+        image: candidate.image,
+        kenyan_citizen: candidate.kenyan_citizen,
+        age: candidate.age,
+        meets_educational_requirements: candidate.meets_educational_requirements,
+        meets_integrity_requirements: candidate.meets_integrity_requirements,
+        nominated_by_party: candidate.nominated_by_party,
+        nominated_by_signatures: candidate.nominated_by_signatures,
+        meets_support_requirements: candidate.meets_support_requirements,
+        manifesto: candidate.manifesto,
+        party_id: candidate.party.id,
+        position_name: candidate.position.name,
+        ward_id: candidate.ward.id,
+        created_at: candidate.created_at,
+        updated_at: candidate.updated_at,
+      }, status: :created
     else
       render json: { error: candidate.errors.full_messages }, status: :unprocessable_entity
     end
@@ -207,15 +199,6 @@ class CandidatesController < ApplicationController
   end
 
   def candidate_params
-    case params[:level]
-    when "President"
-      params.require(:candidate).permit(:name, :email, :education, :manifesto, :party_name, :ward_name)
-    when "Governor", "Senator", "Women_Representative"
-      params.require(:candidate).permit(:name, :email, :education, :manifesto, :party_name, :county_name)
-    when "Member_of_Parliament", "Member_of_County_Assembly"
-      params.require(:candidate).permit(:name, :email, :education, :manifesto, :party_name, :ward_name)
-    else
-      params.require(:candidate).permit(:name, :email, :education, :manifesto, :party_name, :position_name, :ward_name, :county_name)
-    end
+    params.require(:candidate).permit(:name, :email, :education, :manifesto, :abbreviation, :ward_name)
   end
 end
