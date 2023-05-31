@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :authenticate_request, except: [:authenticate, :create, :check_login]
+  before_action :authenticate_request, except: [:authenticate, :create,:destroy, :check_login]
   before_action :check_blocked_status, only: [:authenticate]
 
   rescue_from ActiveRecord::RecordInvalid, with: :record_invalid
@@ -12,8 +12,10 @@ class UsersController < ApplicationController
 
   def check_login
     token = cookies.signed[:token]
-    render json: { logged_in: true, token: token }
+    logged_in = token.present? && current_user_id.present?
+    render json: { logged_in: logged_in, token: token }
   end
+  
 
   def authenticate
     user = User.find_by(email: params[:email])
@@ -23,7 +25,7 @@ class UsersController < ApplicationController
     elsif user.authenticate(params[:password])
       reset_failed_attempts(user)
 
-      token = encode({ user_id: user.id, email: user.email, status: user.blocked? })
+      token = generate_token(user)
       role_message = case user.role.to_sym
         when :admin_clerk
           "Welcome, Admin!"
@@ -55,14 +57,15 @@ class UsersController < ApplicationController
       user.password = params[:password]
       user.password_confirmation = params[:password_confirmation]
       user.save!
-      token = encode({ user_id: user.id, email: user.email })
-      render json: { token: token, user: user, message: "User registered successfully" }, status: :created
+  
+      render json: { user: user, message: "User registered successfully" }, status: :created
     rescue ActiveRecord::RecordInvalid => e
       render json: { errors: e.record.errors.full_messages }, status: :unprocessable_entity
     rescue ActiveRecord::RecordNotUnique => e
       render json: { errors: [e.message] }, status: :unprocessable_entity
     end
   end
+  
 
   def show
     user = User.includes(:voter).find_by(id: current_user_id)
@@ -70,7 +73,7 @@ class UsersController < ApplicationController
   end
 
   def destroy
-    token = nil
+    cookies.delete(:token)
     render json: { message: "User successfully logged out" }, status: :ok
   end
 
@@ -98,6 +101,10 @@ class UsersController < ApplicationController
     decoded_token&.dig(:user_id)
   end
 
+  def generate_token(user)
+    encode({ user_id: user.id, email: user.email, status: user.blocked? })
+  end
+
   def encode(payload)
     JWT.encode(payload, Rails.application.credentials.secret_key_base, "HS256")
   end
@@ -111,6 +118,10 @@ class UsersController < ApplicationController
 
   def authenticate_request
     render json: { error: "Unauthorized" }, status: :unauthorized unless current_user_id && authorized_user?
+  end
+
+  def authorized_user?
+    current_user&.user? || current_user&.admin_clerk?
   end
 
   def check_blocked_status

@@ -75,6 +75,7 @@ function App() {
           ] = `Bearer ${response.data.token}`;
         }
       } catch (error) {
+        setLoggedIn(false);
         console.log("An error occurred during login status check:", error);
       }
     };
@@ -84,7 +85,7 @@ function App() {
 
   const handleLogout = () => {
     axios
-      .delete("http://localhost:4000/logout", { withCredentials: true })
+      .delete("http://localhost:4000/logout", { withCredentials: true }) // Update the URL to match your server-side logout endpoint
       .then(() => {
         setLoggedIn(false);
         delete axios.defaults.headers.common["Authorization"];
@@ -123,13 +124,7 @@ function App() {
             <LoginComponent setLoggedIn={setLoggedIn} />
           )}
         </Route>
-        <Route path="/register">
-          {loggedIn ? (
-            <Redirect to="/user_dashboard" />
-          ) : (
-            <RegistrationComponent />
-          )}
-        </Route>
+        <Route exact path="/register" component={RegistrationComponent} />
         <ProtectedRoute path="/user_dashboard" component={UserDashboard} />
         <ProtectedRoute path="/admin_dashboard" component={AdminDashboard} />
         <Route path="/vacancies" component={Vacancies} />
