@@ -4,7 +4,7 @@ import axios from "axios";
 import { Button, Spinner } from "react-bootstrap";
 import "./Auth.css";
 
-function LoginComponent({setLoggedIn}) {
+function LoginComponent({ setLoggedIn }) {
   const history = useHistory();
 
   const [loginFormData, setLoginFormData] = useState({
@@ -49,22 +49,20 @@ function LoginComponent({setLoggedIn}) {
 
       if (data.message === "Welcome, User!") {
         setMessage(data.message);
-        setIsLoading(false)
+        setIsLoading(false);
         setLoggedIn(true);
-        window.location.reload()
+
         history.push("/user_dashboard");
       } else if (data.message === "Welcome, Clerk!") {
         setMessage(data.message);
-        setIsLoading(false)
+        setIsLoading(false);
         setLoggedIn(true);
         history.push("/clerk_dashboard");
-        window.location.reload()
       } else if (data.message === "Welcome, Admin!") {
         setMessage(data.message);
-        setIsLoading(false)
+        setIsLoading(false);
         setLoggedIn(true);
         history.push("/admin_dashboard");
-        window.location.reload()
       } else {
         setMessage("Unknown role");
       }

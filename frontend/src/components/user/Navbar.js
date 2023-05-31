@@ -4,7 +4,7 @@
 // import PublicIcon from "@material-ui/icons/Public";
 // import "./Sidebar.css";
 
-// function Navbar({ handleLogout }) {
+// function Navbar({  }) {
 //   const [click, setClick] = useState(false);
 
 //   const handleClick = () => setClick(!click);

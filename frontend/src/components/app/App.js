@@ -10,12 +10,6 @@ import {
 } from "react-router-dom";
 import axios from "axios";
 import Vacancies from "../user/Vacancies";
-// import PresidentComponent from "../user/President";
-// import GovernorComponent from "../user/Governor";
-// import SenatorComponent from "../user/Senator";
-// import WomenRepresentativeComponent from "../user/";
-// import MemberOfParliamentComponent from "../user/Mp"
-// import MemberOfCountyAssemblyComponent from "../user/MemberOfCountyAssembly";
 import CandidateList from "../user/Getcandidate";
 import RegistrationComponent from "../authatautication/Registration";
 import LoginComponent from "../authatautication/Login";
@@ -34,54 +28,39 @@ function App() {
   const location = useLocation();
   const path = location.pathname;
 
-  const navbar = useMemo(() => {
-    if (
-      path === "/" ||
-      path === "/about" ||
-      path === "/blogs" ||
-      path === "/contact" ||
-      path === "/services" ||
-      path === "/login" ||
-      path === "/reset-password" ||
-      path === "/register" ||
-      path === "*"
-    ) {
-      return <LandingPageNavbar />;
-    } else if (
-      path === "/user_dashboard" ||
-      path === "/vacancies" ||
-      path === "/candidates" ||
-      path === "/profile-setup" ||
-      path === "/top-up" ||
-      path === "/user-transaction" ||
-      path === "/user-profile" ||
-      path === "/new-beneficiary" ||
-      path === "/beneficiaries" ||
-      path === "/update-profile"
-    ) {
-      return <UserDashboard />;
-    } else {
-      return <AdminDashboard />;
-    }
-  }, [path]);
+  const showLandingPageNavbar = useMemo(() => {
+    const allowedPaths = [
+      "/",
+      "/about",
+      "/blogs",
+      "/contact",
+      "/services",
+      "/login",
+      "/reset-password",
+      "/register",
+      "*",
+    ];
+
+    return !loggedIn && allowedPaths.includes(path);
+  }, [loggedIn, path]);
+
+  const navbar = showLandingPageNavbar ? <LandingPageNavbar /> : null;
 
   const footer = useMemo(() => {
-    if (
-      path === "/" ||
-      path === "/about" ||
-      path === "/blogs" ||
-      path === "/contact" ||
-      path === "/services" ||
-      path === "/login" ||
-      path === "/reset-password" ||
-      path === "/register" ||
-      path === "*"
-    ) {
-      return <Footer />;
-    } else {
+    const showFooterPaths = [
+      "/login",
+      "/register",
+      "/services",
+      "/about",
+      "/contact",
+    ];
+
+    if (loggedIn && showFooterPaths.includes(path)) {
       return null;
+    } else {
+      return <Footer />;
     }
-  }, [path]);
+  }, [loggedIn, path]);
 
   useEffect(() => {
     const checkLoginStatus = async () => {
@@ -116,6 +95,19 @@ function App() {
       });
   };
 
+  const ProtectedRoute = ({ component: Component, ...rest }) => (
+    <Route
+      {...rest}
+      render={(props) =>
+        loggedIn ? (
+          <Component {...props} handleLogout={handleLogout} />
+        ) : (
+          <Redirect to="/login" />
+        )
+      }
+    />
+  );
+
   return (
     <Router>
       {navbar}
@@ -125,7 +117,11 @@ function App() {
         <Route path="/services" component={Services} />
         <Route path="/contact" component={ContactUs} />
         <Route path="/login">
-          {loggedIn ? <Redirect to="/user_dashboard" /> : <LoginComponent setLoggedIn={setLoggedIn}/>}
+          {loggedIn ? (
+            <Redirect to="/user_dashboard" />
+          ) : (
+            <LoginComponent setLoggedIn={setLoggedIn} />
+          )}
         </Route>
         <Route path="/register">
           {loggedIn ? (
@@ -134,37 +130,11 @@ function App() {
             <RegistrationComponent />
           )}
         </Route>
-        <Route path="/user_dashboard">
-          {loggedIn ? (
-            <UserDashboard handleLogout={handleLogout} />
-          ) : (
-            <Redirect to="/login" />
-          )}
-        </Route>
-        <Route path="/admin_dashboard">
-          {loggedIn ? (
-            <AdminDashboard handleLogout={handleLogout} />
-          ) : (
-            <Redirect to="/login" />
-          )}
-        </Route>
+        <ProtectedRoute path="/user_dashboard" component={UserDashboard} />
+        <ProtectedRoute path="/admin_dashboard" component={AdminDashboard} />
         <Route path="/vacancies" component={Vacancies} />
-        {/* <Route path="/president" component={PresidentComponent} />
-        <Route path="/governor" component={GovernorComponent} />
-        <Route path="/senator" component={SenatorComponent} /> */}
-        {/* <Route
-          path="/women_representative"
-          component={WomenRepresentativeComponent}
-        /> */}
-        {/* <Route
-          path="/member_of_parliament"
-          component={MemberOfParliamentComponent}
-        /> */}
-        {/* <Route
-          path="/member_of_county_assembly"
-          component={MemberOfCountyAssemblyComponent}
-        /> */}
         <Route path="/candidates" component={CandidateList} />
+        <Redirect to="/" />
       </Switch>
       {footer}
     </Router>
