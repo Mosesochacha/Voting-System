@@ -1,32 +1,17 @@
 import React from "react";
-import { Container, Navbar,Jumbotron, Button } from "react-bootstrap";
+import { Container, Button } from "react-bootstrap";
 
 const LandingPage = () => {
   return (
-    <div>
-      <Navbar bg="light" expand="lg">
-        <Container>
-          <Navbar.Brand href="/">
-            <img
-              src="/path/to/iebc_logo.png" // Replace with actual path to IEBC logo
-              alt="IEBC Logo"
-              className="logo"
-            />
-          </Navbar.Brand>
-        </Container>
-      </Navbar>
-
-      <Jumbotron>
-        <Container>
+    <div className="landing-page" style={{color: "white"}}>
+      <div className="landing-background">
+        <Container className="text-center" >
           <h1>Welcome to the Online Voting System</h1>
           <p>Make your vote count from anywhere, anytime!</p>
           <Button href="/register" variant="primary">
             Get Started
           </Button>
-        </Container>
-      </Jumbotron>
-
-      <Container>
+          <Container>
         <h2>Secure and Convenient Voting</h2>
         <p>
           Our online voting system provides a secure and convenient way for
@@ -39,12 +24,10 @@ const LandingPage = () => {
           advanced security measures and verifiable results.
         </p>
       </Container>
-
-      <footer className="footer">
-        <Container>
-          <p>&copy; 2023 Independent Electoral and Boundaries Commission</p>
         </Container>
-      </footer>
+      </div>
+
+    
     </div>
   );
 };

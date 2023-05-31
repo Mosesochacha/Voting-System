@@ -1,4 +1,22 @@
 Rails.application.routes.draw do
+  # resources :votes
+
+  # get "/mcas" , to: "votes#get_mcas"
+  # get "govornor" to: "votes#get_govonre"
+  # get "/President" , to: "votes#get_President"
+  # get "/Senator" , to: "votes#get_Senator"
+  # get "/Women_Representative" , to: "votes#get_Women_Representative"
+  # get "/Member_of_Parliament" , to: "votes#Member_of_Parliament"
+  # get "/Member_of_Count_ Assembly" , to: "votes#Member_of_Count_ Assembly"
+
+  # post "/mcas" , to: "votes#craete_mcas"
+  # post "govornor" to: "votes#craete_govonre"
+  # post "/President" , to: "votes#craete_President"
+  # post "/Senator" , to: "votes#craete_Senator"
+  # post "/Women_Representative" , to: "votes#craete_Women_Representative"
+  # post "/Member_of_Parliament" , to: "votes#craete_Member_of_Parliament"
+  # post "/Member_of_Count_ Assembly" , to: "votes#craete_Member_of_Count_ Assembly"
+
   # Voters routes
   get "/voters", to: "voters#index"
   post "/voters/:ward_id", to: "voters#register_voter"
@@ -47,9 +65,11 @@ Rails.application.routes.draw do
   # patch "/counties/:id", to: "counties#update"
   # delete "/counties/:id", to: "counties#destroy"
 
-  # get "/nationals", to: "nationals#index"
-  # post "/nationals", to: "nationals#create"
-  # get "/nationals/:id", to: "nationals#show", as: "national"
-  # patch "/nationals/:id", to: "nationals#update"
-  # delete "/nationals/:id", to: "nationals#destroy"
+  # Routes for BallotsController
+  get '/governor', to: 'ballots#get_governor'
+  get '/president', to: 'ballots#get_president'
+  get '/senator', to: 'ballots#get_senator'
+  get '/women_rep', to: 'ballots#get_women_rep'
+  get '/member_of_parliament', to: 'ballots#get_member_of_parliament'
+  get '/membercounty', to: 'ballots#get_member_of_county_assembly'
 end

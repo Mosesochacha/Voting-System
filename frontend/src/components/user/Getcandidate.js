@@ -35,9 +35,9 @@ const CandidatesList = () => {
           <option value="President">President</option>
           <option value="Governor">Governor</option>
           <option value="Senator">Senator</option>
-          <option value="Women Representative">Women Representative</option>
-          <option value="Member of Parliament">Member of Parliament</option>
-          <option value="Member of County Assembly">
+          <option value="Women_Representative">Women Representative</option>
+          <option value="Member_of_Parliament">Member of Parliament</option>
+          <option value="Member_of_County Assembly">
             Member of County Assembly
           </option>
         </select>

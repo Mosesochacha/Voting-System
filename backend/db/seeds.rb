@@ -90,7 +90,6 @@ positions = [
 ]
 positions.each { |position| Position.create(position) }
 
-
 # Create parties
 parties = [
   # { name: "National Rainbow Coalition-Kenya", code: "001", abbreviation: "NARCKENYA", symbol_name: "Rose Flower" },
@@ -230,17 +229,16 @@ parties = [
   { name: "Kenya Progressive Union", code: "147", abbreviation: "KPU", symbol_name: "Two hands holding a dove and an olive branch" },
   { name: "Democratic Alliance Party", code: "148", abbreviation: "DAP", symbol_name: "Two hands forming a triangle" },
   { name: "National Democratic Movement", code: "149", abbreviation: "NDM", symbol_name: "Two hands holding a gear" },
-  { name: "People's Democracy Party", code: "150", abbreviation: "PDP", symbol_name: "Two hands holding a sun" }
+  { name: "People's Democracy Party", code: "150", abbreviation: "PDP", symbol_name: "Two hands holding a sun" },
 ]
 parties.each do |party|
   Party.create!(
     name: party[:name],
     party_code: party[:code],
     abbreviation: party[:abbreviation],
-    symbol_name: party[:symbol_name]
+    symbol_name: party[:symbol_name],
   )
 end
-
 
 # Create voters using Faker
 10.times do
@@ -287,4 +285,17 @@ end
   candidate.save!
 end
 
-puts "Seeding completed successfully."
+
+# Create Votes
+Candidate.all.each do |candidate|
+  # Shuffle the voters to randomize the voting order
+  voters = candidate.voters.shuffle
+
+  # Ensure each voter votes only once for the candidate
+  voters.each do |voter|
+    Vote.create(voter: voter, candidate: candidate)
+  end
+end
+
+
+puts "Seeding completed."

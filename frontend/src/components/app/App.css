@@ -1,38 +1,46 @@
-.App {
+.footer {
+  /* /* margin-left: ; */
+  bottom: 0;
+  width: 100%;
+  height: 40%;
+  background-color: rgb(10, 150, 10);
+  /* position: fixed; */
+}
+@font-face {
+  font-family: "Material Icons";
+  font-style: normal;
+  font-weight: 400;
+  src: url(https://example.com/MaterialIcons-Regular.eot); /* For IE6-8 */
+  src: local("Material Icons"), local("MaterialIcons-Regular"),
+    url(https://example.com/MaterialIcons-Regular.woff2) format("woff2"),
+    url(https://example.com/MaterialIcons-Regular.woff) format("woff"),
+    url(https://example.com/MaterialIcons-Regular.ttf) format("truetype");
+}
+.navbar {
+  width: 100%;
+  position: sticky;
+  z-index: 999;
+  margin-top: 0;
+  top: 0;
+  background-color: rgb(10, 150, 10);
+}
+
+.align-right {
+  justify-content: flex-end;
+}
+
+body {
+  font-family: "Times New Roman", Times, serif;
+  /* background-image: url("./Screenshot from 2023-05-30 11-59-44.png"); */
+  background-size: cover;
+  background-color: bisque;
+  background-position: center;
   text-align: center;
+  /* padding: 100px 0; */
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
+/* .content {
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 20px;
+  border-radius: 10px;
+} */

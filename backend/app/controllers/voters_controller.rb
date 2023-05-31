@@ -84,6 +84,7 @@ class VotersController < ApplicationController
             date_of_birth: birth_date.blank? ? nil : Date.parse(birth_date),
             age: calculate_age(birth_date.blank? ? nil : Date.parse(birth_date), Date.today),
             ward_id: params[:ward_id],
+            user_id: current_user.id
           )
   end
 

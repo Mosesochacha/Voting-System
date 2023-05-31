@@ -1,129 +1,57 @@
-import React from "react";
+// import React, { useState } from "react";
+// import { Link } from "react-router-dom";
+// import logo from "./iebc-logo-4405AFE0AD-seeklogo.com.png";
+// import PublicIcon from "@material-ui/icons/Public";
+// import "./Sidebar.css";
 
-function Navbar({ loggedIn, handleLogout }) {
-  const handleRefresh = () => {
-    window.location.reload();
-  };
+// function Navbar({ handleLogout }) {
+//   const [click, setClick] = useState(false);
 
- 
-  return (
-    <nav>
-      <ul>
-        <li>
-          <button
-            style={{
-              background: "none",
-              border: "none",
-              margin: "0",
-              padding: "0",
-              cursor: "pointer",
-              color: "blue",
-            }}
-            onClick={() => {
-              handleRefresh();
-              window.location.href = "/";
-            }}
-          >
-            Home
-          </button>
-        </li>
-        {loggedIn ? (
-          <>
-            <li>
-              <button
-                style={{
-                  background: "none",
-                  border: "none",
-                  margin: "0",
-                  padding: "0",
-                  cursor: "pointer",
-                  color: "blue",
-                }}
-                onClick={() => {
-                  handleRefresh();
-                  window.location.href = "/candidates";
-                }}
-              >
-                Candidates
-              </button>
-            </li>
-            <li>
-              <button
-                style={{
-                  background: "none",
-                  border: "none",
-                  margin: "0",
-                  padding: "0",
-                  cursor: "pointer",
-                  color: "blue",
-                }}
-                onClick={() => {
-                  handleRefresh();
-                  window.location.href = "/vacancies";
-                }}
-              >
-                Vacancies
-              </button>
-            </li>
-            <li>
-              <button
-                style={{
-                  background: "none",
-                  border: "none",
-                  margin: "0",
-                  padding: "0",
-                  cursor: "pointer",
-                  color: "blue",
-                }}
-                onClick={handleLogout}
-              >
-                Logout
-              </button>
-            </li>
-          </>
-        ) : (
-          <>
-            <li>
-              <button
-                style={{
-                  background: "none",
-                  border: "none",
-                  margin: "0",
-                  padding: "0",
-                  cursor: "pointer",
-                  color: "blue",
-                }}
-                onClick={() => {
-                  handleRefresh();
-                  window.location.href = "/login";
-                }}
-              >
-                Login
-              </button>
-            </li>
-            <li>
-              <button
-                style={{
-                  background: "none",
-                  border: "none",
-                  margin: "0",
-                  padding: "0",
-                  cursor: "pointer",
-                  color: "blue",
-                }}
-                onClick={() => {
-                  handleRefresh();
-                  window.location.href = "/register";
-                }}
-              >
-                Register
-              </button>
-            </li>
-          </>
-        )}
-      </ul>
-    </nav>
-  );
-}
+//   const handleClick = () => setClick(!click);
+//   const closeMobileMenu = () => setClick(false);
 
-export default Navbar;
+//   return (
+//     <>
+//       <nav className="navbar navbar-top">
+//         <div className="container">
+//           <Link to="/" className="navbar-brand" onClick={closeMobileMenu}>
+//             <img
+//               src={logo}
+//               alt="IEBC Logo"
+//               className="navbar-logo"
+//               style={{ width: "1.5em" }}
+//             />
+//             Kenya Voting
+//             <PublicIcon style={{ color: "#ffffff" }} />
+//           </Link>
+//           <button
+//             className="navbar-toggler"
+//             type="button"
+//             onClick={handleClick}
+//           >
+//             <span className="navbar-toggler-icon" />
+//           </button>
+//           <div
+//             className={
+//               click
+//                 ? "collapse navbar-collapse show"
+//                 : "collapse navbar-collapse"
+//             }
+//           >
+//             <ul className="navbar-nav ml-auto">
+//               <li className="nav-item ml-4"></li>
+//               <li className="nav-item ml-2"></li>
+//               <li className="nav-item ml-2"></li>
+//               <li className="nav-item ml-2"></li>
+//             </ul>
+//           </div>
+//           <button className="nav-link logout-button" onClick={handleLogout}>
+//             Logout
+//           </button>
+//         </div>
+//       </nav>
+//     </>
+//   );
+// }
+
+// export default Navbar;

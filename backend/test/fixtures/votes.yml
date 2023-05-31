@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  voter: one
+  candidate: one
+  position: one
+  votes: 1
+  voting_start_date: 2023-05-28 15:21:29
+  voting_end_date: 2023-05-28 15:21:29
+
+two:
+  voter: two
+  candidate: two
+  position: two
+  votes: 1
+  voting_start_date: 2023-05-28 15:21:29
+  voting_end_date: 2023-05-28 15:21:29

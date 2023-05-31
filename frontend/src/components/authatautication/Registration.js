@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
+import { TextField, Typography } from "@material-ui/core";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import MailOutlineIcon from "@material-ui/icons/MailOutline";
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import { Button, Spinner } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./Auth.css";
 
 function RegistrationComponent() {
   const history = useHistory();
@@ -36,7 +43,7 @@ function RegistrationComponent() {
         password_confirmation: registerFormData.password_confirmation,
       });
 
-      const data = response.data; // Use response.data instead of just response
+      const data = response.data;
       console.log(data);
 
       if (data.message) {
@@ -58,46 +65,82 @@ function RegistrationComponent() {
   };
 
   return (
-    <div>
-      <h2>Register</h2>
+    <div className="card">
+      <Typography variant="h6" component="div" className="text">
+        Register
+      </Typography>
       <form onSubmit={handleRegisterSubmit}>
-        <input
-          type="text"
-          name="name"
-          placeholder="Name"
-          value={registerFormData.name}
-          onChange={handleRegisterChange}
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={registerFormData.email}
-          onChange={handleRegisterChange}
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={registerFormData.password}
-          onChange={handleRegisterChange}
-        />
-        <input
-          type="password"
-          name="password_confirmation"
-          placeholder="Confirm Password"
-          value={registerFormData.password_confirmation}
-          onChange={handleRegisterChange}
-        />
-        <button type="submit" disabled={isRegistering}>
-          {isRegistering ? "Registering..." : "Register"}
-        </button>
+        <div className="field">
+          <AccountCircleIcon className="span" />
+          <TextField
+            type="text"
+            name="name"
+            label="Name"
+            value={registerFormData.name}
+            onChange={handleRegisterChange}
+            className="input"
+          />
+        </div>
+        <div className="field">
+          <MailOutlineIcon className="span" />
+          <TextField
+            type="email"
+            name="email"
+            label="Email"
+            variant="filled"
+            value={registerFormData.email}
+            onChange={handleRegisterChange}
+            className="input"
+          />
+        </div>
+        <div className="field">
+          <LockOutlinedIcon className="span" />
+          <TextField
+            type="password"
+            name="password"
+            label="Password"
+            value={registerFormData.password}
+            onChange={handleRegisterChange}
+            className="input"
+          />
+        </div>
+        <div className="field">
+          <LockOutlinedIcon className="span" />
+          <TextField
+            type="password"
+            name="password_confirmation"
+            label="Confirm Password"
+            value={registerFormData.password_confirmation}
+            onChange={handleRegisterChange}
+            className="input"
+          />
+        </div>
+        <Button
+          variant="primary"
+          type="submit"
+          disabled={isRegistering}
+          className="button"
+        >
+          {isRegistering ? (
+            <>
+              <Spinner animation="border" size="sm" className="mr-2" />
+              Registering...
+            </>
+          ) : (
+            "Register"
+          )}
+        </Button>
         <div>
           {errors.map((error, index) => (
-            <p key={index}>{error}</p>
+            <Typography key={index} variant="body2" color="error">
+              {error}
+            </Typography>
           ))}
         </div>
-        {message && <p>{message}</p>}
+        <Typography variant="body2" className="sign-up">
+          Already a member? <a href="/login">Login</a>
+        </Typography>
+        {message && <Typography variant="body1">{message}</Typography>}
       </form>
     </div>
   );
