@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import logo from "./iebc-logo-4405AFE0AD-seeklogo.com.png";
 import PublicIcon from "@material-ui/icons/Public";
 import "./Sidebar.css";
-import "./Dashboard.css"
+import "./Dashboard.css";
 
 const UserDashboard = ({ handleLogout }) => {
   return (
@@ -48,7 +48,10 @@ const UserDashboard = ({ handleLogout }) => {
               </li>
             </ul>
           </div>
-          <div className="col-lg-9 col-md-8 col-sm-12"></div>
+          <div className="col-lg-9 col-md-8 col-sm-12">
+            {/* Add your professional dashboard content here */}
+            {/* This section will display the content related to the selected menu item */}
+          </div>
         </div>
       </div>
     </div>

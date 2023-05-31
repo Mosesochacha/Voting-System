@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :authenticate_request, except: [:authenticate, :create,:destroy, :check_login]
+  before_action :authenticate_request, except: [:authenticate, :create, :destroy, :check_login]
   before_action :check_blocked_status, only: [:authenticate]
 
   rescue_from ActiveRecord::RecordInvalid, with: :record_invalid
@@ -15,7 +15,6 @@ class UsersController < ApplicationController
     logged_in = token.present? && current_user_id.present?
     render json: { logged_in: logged_in, token: token }
   end
-  
 
   def authenticate
     user = User.find_by(email: params[:email])
@@ -52,20 +51,18 @@ class UsersController < ApplicationController
   end
 
   def create
-    begin
-      user = User.new(user_params)
-      user.password = params[:password]
-      user.password_confirmation = params[:password_confirmation]
-      user.save!
-  
-      render json: { user: user, message: "User registered successfully" }, status: :created
-    rescue ActiveRecord::RecordInvalid => e
-      render json: { errors: e.record.errors.full_messages }, status: :unprocessable_entity
-    rescue ActiveRecord::RecordNotUnique => e
-      render json: { errors: [e.message] }, status: :unprocessable_entity
+    user = User.new(user_params)
+    user.password = params[:password]
+    user.password_confirmation = params[:password_confirmation]
+
+    if user.save
+      token = generate_token(user)
+      cookies.signed[:token] = { value: token, httponly: true }
+      render json: { user: user, token: token, message: "User registered successfully" }, status: :created
+    else
+      render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
     end
   end
-  
 
   def show
     user = User.includes(:voter).find_by(id: current_user_id)
