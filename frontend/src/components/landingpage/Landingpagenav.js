@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Button } from "./Button";
 import { Link } from "react-router-dom";
 import logo from "./iebc-logo-4405AFE0AD-seeklogo.com.png";
-import PublicIcon from "@material-ui/icons/Public";
+import { AiOutlineGlobal } from "react-icons/ai";
 
 function LandingPageNavbar() {
   const [click, setClick] = useState(false);
@@ -39,7 +39,7 @@ function LandingPageNavbar() {
             style={{ width: "1.5em" }}
           />
           Kenya Voting
-          <PublicIcon style={{ color: "#ffffff" }} />
+          <AiOutlineGlobal style={{ color: "#ffffff" }} />
         </Link>
         <button className="navbar-toggler" type="button" onClick={handleClick}>
           <span className="navbar-toggler-icon" />

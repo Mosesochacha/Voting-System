@@ -1,19 +1,44 @@
-import React from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
+import React, { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import logo from "./iebc-logo-4405AFE0AD-seeklogo.com.png";
-import PublicIcon from "@material-ui/icons/Public";
-import "./Sidebar.css";
-import "./Dashboard.css";
+import { AiOutlineGlobal } from "react-icons/ai";
 
-const UserDashboard = ({ handleLogout }) => {
+export default function UserDashboard({ handleLogout }) {
+  const [click, setClick] = useState(false);
+
+  const handleClick = () => setClick(!click);
+  const closeMobileMenu = () => setClick(false);
+
+  const showButton = useMemo(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 960) {
+        setClick(false);
+      }
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    return handleResize;
+  }, []);
+
+  useEffect(() => {
+    showButton();
+    return () => {
+      window.removeEventListener("resize", showButton);
+    };
+  }, [showButton]);
+
   return (
-    <div className="dashboard">
+    <div className="userdashboard">
       <nav
-        className="navbar navbar-expand-lg navbar-light"
-        style={{ position: "sticky", top: 0, zIndex: 100 }}
+        className="navbar navbar-expand-lg navbar-light bg-dack sticky-top"
+        style={{ zIndex: 100 }}
       >
         <div className="container">
-          <Link to="/" className="navbar-brand">
+          <Link to="/" className="navbar-brand" onClick={closeMobileMenu}>
             <img
               src={logo}
               alt="IEBC Logo"
@@ -21,41 +46,79 @@ const UserDashboard = ({ handleLogout }) => {
               style={{ width: "1.5em" }}
             />
             Kenya Voting
-            <PublicIcon style={{ color: "#ffffff" }} />
+            <AiOutlineGlobal style={{ color: "#ffffff" }} />
           </Link>
-          <button onClick={handleLogout}>Logout</button>
-        </div>
-      </nav>
-
-      <div className="sidebar">
-        <div className="row">
-          <div className="col-lg-3 col-md-4 col-sm-12">
-            <ul className="list-group">
-              <li className="list-group-item">
-                <Link to="/vote">Vote</Link>
-              </li>
-              <li className="list-group-item">
-                <Link to="/profile">Profile</Link>
-              </li>
-              <li className="list-group-item">
-                <Link to="/candidates">Candidates</Link>
-              </li>
-              <li className="list-group-item">
-                <Link to="/voting-history">Voting History</Link>
-              </li>
-              <li className="list-group-item">
-                <Link to="/vacancies">Vacancies</Link>
+          <button
+            className="navbar-toggler"
+            type="button"
+            onClick={handleClick}
+          >
+            <span className="navbar-toggler-icon" />
+          </button>
+          <div
+            className={
+              click
+                ? "collapse navbar-collapse show"
+                : "collapse navbar-collapse"
+            }
+          >
+            <ul className="navbar-nav ml-auto">
+              <li className="nav-item ml-4">
+                <button className="nav-link" onClick={handleLogout}>
+                  Logout
+                </button>
               </li>
             </ul>
           </div>
-          <div className="col-lg-9 col-md-8 col-sm-12">
-            {/* Add your professional dashboard content here */}
-            {/* This section will display the content related to the selected menu item */}
+        </div>
+      </nav>
+
+      <div className="container-fluid">
+        <div className="row">
+          <div className="col-auto col-md-2 min-vh-100 bg-dark">
+            <ul className="nav flex-column">
+              <li className="nav-item">
+                <a className="nav-link" href="/user-dashboard">
+                  <i className="bi bi-house" />
+                  <span className="ms-1">Home</span>
+                </a>
+              </li>
+              <li className="nav-item">
+                <a className="nav-link" href="/user-dashboard">
+                  <i className="bi bi-vote" />
+                  <span className="ms-1">Vote</span>
+                </a>
+              </li>
+              <li className="nav-item">
+                <a className="nav-link" href="/user-dashboard">
+                  <i className="bi bi-person" />
+                  <span className="ms-1">Profile</span>
+                </a>
+              </li>
+              <li className="nav-item">
+                <a className="nav-link" href="/user-dashboard">
+                  <i className="bi bi-history" />
+                  <span className="ms-1">Voting History</span>
+                </a>
+              </li>
+              <li className="nav-item">
+                <a className="nav-link" href="/user-dashboard">
+                  <i className="bi bi-briefcase" />
+                  <span className="ms-1">Vacancies</span>
+                </a>
+              </li>
+              <li className="nav-item">
+                <a className="nav-link" href="/user-dashboard">
+                  <i className="bi bi-people" />
+                  <span className="ms-1">Candidate List</span>
+                </a>
+              </li>
+            </ul>
           </div>
         </div>
       </div>
     </div>
   );
-};
+}
 
-export default UserDashboard;
+// eslint-disable-next-line

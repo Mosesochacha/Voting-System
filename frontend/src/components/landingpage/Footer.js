@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Facebook, Twitter, Instagram } from "@material-ui/icons";
 
 export default function Footer() {
   return (
@@ -10,8 +9,8 @@ export default function Footer() {
           <div className="col-lg-3">
             <h4>I am Heshima</h4>
             <p>
-              This an organization that has enabled me gain this skills to work
-              for my community.
+              This is an organization that has enabled me to gain these skills
+              to work for my community.
             </p>
           </div>
           <div className="col-lg-3">
@@ -37,24 +36,25 @@ export default function Footer() {
             <p>contact@example.com</p>
             <p>+123 456 7890</p>
           </div>
+
           <div className="col-lg-3">
             <h4>Follow Us</h4>
             <ul className="footer-social-links">
               <li>
                 <a href="https://www.facebook.com">
-                  <Facebook />
+                  <i className="material-icons">facebook</i>
                   Facebook
                 </a>
               </li>
               <li>
                 <a href="https://www.twitter.com">
-                  <Twitter />
+                  <i className="material-icons">twitter</i>
                   Twitter
                 </a>
               </li>
               <li>
                 <a href="https://www.instagram.com">
-                  <Instagram />
+                  <i className="material-icons">instagram</i>
                   Instagram
                 </a>
               </li>

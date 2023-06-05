@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
-import { TextField, Typography } from "@material-ui/core";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import MailOutlineIcon from "@material-ui/icons/MailOutline";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import { TextField, Typography } from "@mui/material";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import MailOutlineIcon from "@mui/icons-material/MailOutline";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+
 import { Button, Spinner } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Auth.css";

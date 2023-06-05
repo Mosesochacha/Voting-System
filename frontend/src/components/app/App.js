@@ -9,7 +9,7 @@ import {
   Redirect,
 } from "react-router-dom";
 import axios from "axios";
-import Vacancies from "../user/Vacancies";
+// import Vacancies from "../user/Vacancies";
 import CandidateList from "../user/Getcandidate";
 import RegistrationComponent from "../authatautication/Registration";
 import LoginComponent from "../authatautication/Login";
@@ -87,7 +87,6 @@ function App() {
     axios
       .delete("http://localhost:4000/logout", { withCredentials: true }) // Update the URL to match your server-side logout endpoint
       .then(() => {
-        setLoggedIn(false);
         delete axios.defaults.headers.common["Authorization"];
         history.push("/login");
       })
@@ -125,9 +124,12 @@ function App() {
           )}
         </Route>
         <Route exact path="/register" component={RegistrationComponent} />
-        <ProtectedRoute path="/user_dashboard" component={UserDashboard} />
+        <Route path="/user_dashboard">
+          <UserDashboard handleLogout={handleLogout} />
+        </Route>
+
         <ProtectedRoute path="/admin_dashboard" component={AdminDashboard} />
-        <Route path="/vacancies" component={Vacancies} />
+        {/* <Route path="/vacancies" component={Vacancies} /> */}
         <Route path="/candidates" component={CandidateList} />
         <Redirect to="/" />
       </Switch>
