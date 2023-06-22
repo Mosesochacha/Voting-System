@@ -1,0 +1,9 @@
+body{
+    background-color: antiquewhite;
+}
+.dashboard{
+    position: sticky;
+    z-index: 999;
+    top: 0;
+    
+}

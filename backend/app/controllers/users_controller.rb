@@ -29,7 +29,7 @@ class UsersController < ApplicationController
         when :admin_clerk
           "Welcome, Admin!"
         when :clerk
-          "Welcome, Clerk!"
+          "Welcome, Clerkz!"
         else
           "Welcome, User!"
         end

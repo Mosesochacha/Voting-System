@@ -1,0 +1,29 @@
+.footer-links li,
+.footer-social-links li {
+  margin-bottom: 10px;
+}
+
+.footer-links a,
+.footer-social-links a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.footer-links a:hover,
+.footer-social-links a:hover {
+  text-decoration: underline;
+}
+
+.footer-social-links svg {
+  vertical-align: middle;
+  margin-right: 5px;
+}
+.landing-background {
+  background-image: url("./pexels-bri-schneiter-346529.jpg");
+  background-size: cover;
+  background-position: center;
+  text-align: center;
+  color: #fff;
+  padding: 100px 0;
+}
+
